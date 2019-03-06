@@ -36,4 +36,6 @@ Program.cs			README.md			mixin_labs-csharp-bot.csproj	obj
 dotnet build
 dotnet bin/Debug/netcoreapp2.2/mixin_labs-csharp-bot.dll
 ```
-git submodule add https://github.com/wjfree/mixin-csharp-sdk.git
+<!-- git submodule add https://github.com/wjfree/mixin-csharp-sdk.git -->
+
+dotnet add package MixinCSharpSdk --version 0.1.0
