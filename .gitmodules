@@ -1,0 +1,3 @@
+[submodule "mixin-csharp-sdk"]
+	path = mixin-csharp-sdk
+	url = https://github.com/wjfree/mixin-csharp-sdk.git

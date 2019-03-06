@@ -9,5 +9,11 @@
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="12.1.2" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include=".\mixin-csharp-sdk\mixin-csharp-sdk\mixin-csharp-sdk.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.4" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+  </ItemGroup>
 </Project>
