@@ -10,6 +10,11 @@ using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 
+using System.IO;
+using System.Text;
+using CsvHelper;
+using CsvHelper.TypeConversion;
+
 namespace mixin_labs_csharp_bot
 {
     class Program
@@ -47,20 +52,41 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
                           PrivateKey);
             Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
 
-            var kpgen = new RsaKeyPairGenerator();
+            // var kpgen = new RsaKeyPairGenerator();
+            //
+            // kpgen.Init(new KeyGenerationParameters(new SecureRandom(new CryptoApiRandomGenerator()), 1024));
+            //
+            // var keyPair = kpgen.GenerateKeyPair();
+            // AsymmetricKeyParameter privateKey = keyPair.Private;
+            // AsymmetricKeyParameter publicKey = keyPair.Public;
+            //
+            // SubjectPublicKeyInfo info = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
+            // string pk = Convert.ToBase64String(info.GetDerEncoded());
+            //
+            //
+            // var user = mixinApi.APPUser("Csharp" + (new Random().Next() % 100) + " Cat", pk);
+            // Console.WriteLine(user);
+            var u = mixinApi.SearchUser("37222956");
+            Console.WriteLine(u);
+            Console.WriteLine(u.user_id);
+            Console.WriteLine(u.full_name);
 
-            kpgen.Init(new KeyGenerationParameters(new SecureRandom(new CryptoApiRandomGenerator()), 1024));
+            using (var writer = new StreamWriter("new_users.csv"))
+            using (var csv = new CsvWriter(writer))
+            {
+                csv.WriteField(u.user_id);
+                csv.WriteField(u.full_name);
+                csv.NextRecord();
+                csv.Flush();
+            }
 
-            var keyPair = kpgen.GenerateKeyPair();
-            AsymmetricKeyParameter privateKey = keyPair.Private;
-            AsymmetricKeyParameter publicKey = keyPair.Public;
-
-            SubjectPublicKeyInfo info = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            string pk = Convert.ToBase64String(info.GetDerEncoded());
-
-
-            var user = mixinApi.APPUser("Csharp" + (new Random().Next() % 100) + " Cat", pk);
-            Console.WriteLine(user);
+            // using (var reader = new StreamReader(file.InputStream))
+            // using (var csvReader = new CsvReader(reader))
+            // {
+            //     // Use While(csvReader.Read()); if you want to read all the rows in the records)
+            //     csvReader.Read();
+            //     return csvReader.GetRecords<SurveyEmailListModels>().ToArray();
+            // }
         }
     }
 }
