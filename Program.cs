@@ -94,6 +94,21 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
                   csv.Flush();
               }
             }
+            if (cmd == "2") {
+              string value;
+              using (TextReader fileReader = File.OpenText(@"new_users.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                      for (int i = 0; csv.TryGetField<string>(i, out value); i++)
+                      {
+                          Console.WriteLine(value);
+                      }
+                  }
+              }
+            }
             if (cmd == "q") { break; }
             if (cmd == "s") {
               var u = mixinApi.SearchUser("37222956");
