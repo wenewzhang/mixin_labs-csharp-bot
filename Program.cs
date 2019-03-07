@@ -75,17 +75,19 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
 
               var user = mixinApi.APPUser("Csharp" + (new Random().Next() % 100) + " Cat", pk);
               Console.WriteLine(user);
-              using (var writer = new StreamWriter("new_users.csv"))
+              using (var writer = new StreamWriter("new_users.csv",append: true))
               using (var csv = new CsvWriter(writer))
               {
                   csv.WriteField(user.user_id);
 
+//Write Private key to CSV
                   RsaPrivateCrtKeyParameters rsaParameters = (RsaPrivateCrtKeyParameters) privateKey;
-
                   RSACryptoServiceProvider priKey = new RSACryptoServiceProvider();
                   priKey.ImportParameters(DotNetUtilities.ToRSAParameters(rsaParameters));
+                  TextWriter pemText = new StringWriter();
+                  ExportPrivateKey(priKey, pemText);
+                  csv.WriteField(pemText.ToString());
 
-                  // csv.WriteField(DotNetUtilities.ToRSA(keyPair.Private));
                   csv.WriteField(user.pin_token);
                   csv.WriteField(user.session_id);
                   csv.NextRecord();
