@@ -22,7 +22,14 @@ namespace echo_bot
 
             Console.WriteLine("======== Initiation Finished ========= \n");
 
+            Console.WriteLine("\n\n======== Test Read Assets ===========\n");
 
+            var assets = mixinApi.ReadAssets();
+            foreach (var asset in assets)
+            {
+                Console.WriteLine(asset.ToString());
+                Console.WriteLine();
+            }
 
             mixinApi.WebSocketConnect(HandleOnRecivedMessage).Wait();
 
