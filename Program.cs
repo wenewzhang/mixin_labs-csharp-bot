@@ -21,12 +21,12 @@ namespace mixin_labs_csharp_bot
 {
     class Program
     {
-    public static string ClientId     = "ddbf6591-f908-46c3-8101-cd19df31aa93";
-    public static string ClientSecret = "ac67c0d80f9736039379f6cf1ba62f0d4ce47195386bf8750cf1bd00a8b4ca8c";
-    public static string PinCode      = "585128";
-    public static string SessionId    = "8ea48956-e9de-4775-9a49-4192f20acfd6";
-    public static string PinToken     = "IUgOe7lQyLuEjrAzYgovKycYU5e9y+S0cwpamLWpmNJ4mwBFeG9l2fswU1imsOkQnhO3jA6L8l/AGC07G2JyrzEfaPT9WKBCuhlLm3UVGOWwsxU4Pa5qkafO7iSgPH+cK9Me5qpQ4H18R+zXkYuQNDz3DxuxKYtSGA8tph9+S1w=";
-    public static string PrivateKey   =
+    public static string ClientId        = "ddbf6591-f908-46c3-8101-cd19df31aa93";
+    public static string ClientSecret    = "ac67c0d80f9736039379f6cf1ba62f0d4ce47195386bf8750cf1bd00a8b4ca8c";
+    public static string PinCode         = "585128";
+    public static string SessionId       = "8ea48956-e9de-4775-9a49-4192f20acfd6";
+    public static string PinToken        = "IUgOe7lQyLuEjrAzYgovKycYU5e9y+S0cwpamLWpmNJ4mwBFeG9l2fswU1imsOkQnhO3jA6L8l/AGC07G2JyrzEfaPT9WKBCuhlLm3UVGOWwsxU4Pa5qkafO7iSgPH+cK9Me5qpQ4H18R+zXkYuQNDz3DxuxKYtSGA8tph9+S1w=";
+    public static string PrivateKey      =
     @"-----BEGIN RSA PRIVATE KEY-----
 MIICXAIBAAKBgQCVn+sAxgq4zdDZdkWria2JhvveIfAeYjK7A2hyEerhSBJKeuk6
 kbDeyFcqEBVPtIDOt5oDr8YLSXQGvw69u+OKJeEXaxkD/oo+AOUu+YhTrRPpP9uA
@@ -44,9 +44,25 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
 -----END RSA PRIVATE KEY-----";
     public static string MASTER_ID       = "37222956";
     public static string MASTER_UUID     = "0b4f49dc-8fb4-4539-9a89-fb3afc613747";
-    public static string ASSET_ID_BTC    = "c6d0c728-2624-429b-8e0d-d9d19b6592fa";
+    public static string ASSET_ID_BTC    = "965e5c6e-434c-3fa9-b780-c50f43cd955c";
     public static string ASSET_ID_EOS    = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d";
     public static string BTC_WALLET_ADDR = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C";
+    public static string AMOUNT          = "0.001";
+// # // Mixin Network support cryptocurrencies (2019-02-19)
+// # // |EOS|6cfe566e-4aad-470b-8c9a-2fd35b49c68d
+// # // |CNB|965e5c6e-434c-3fa9-b780-c50f43cd955c
+// # // |BTC|c6d0c728-2624-429b-8e0d-d9d19b6592fa
+// # // |ETC|2204c1ee-0ea2-4add-bb9a-b3719cfff93a
+// # // |XRP|23dfb5a5-5d7b-48b6-905f-3970e3176e27
+// # // |XEM|27921032-f73e-434e-955f-43d55672ee31
+// # // |ETH|43d61dcd-e413-450d-80b8-101d5e903357
+// # // |DASH|6472e7e3-75fd-48b6-b1dc-28d294ee1476
+// # // |DOGE|6770a1e5-6086-44d5-b60f-545f9d9e8ffd
+// # // |LTC|76c802a2-7c88-447f-a93e-c29c9e5dd9c8
+// # // |SC|990c4c29-57e9-48f6-9819-7d986ea44985
+// # // |ZEN|a2c5d22b-62a2-4c13-b3f0-013290dbac60
+// # // |ZEC|c996abc9-d94e-4494-b1cf-2a3fd3ac5714
+// # // |BCH|fd11b6e3-0b87-41f1-a41f-f0e9b49e5bf0
         static void Main(string[] args)
         {
             MixinApi mixinApi = new MixinApi();
@@ -99,7 +115,6 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
               }
             }
             if (cmd == "2" || cmd == "3") {
-              string value;
               using (TextReader fileReader = File.OpenText(@"new_users.csv"))
               {
                   var csv = new CsvReader(fileReader);
@@ -124,7 +139,6 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
               }
             }
             if (cmd == "4" || cmd == "5") {
-              string value;
               using (TextReader fileReader = File.OpenText(@"new_users.csv"))
               {
                   var csv = new CsvReader(fileReader);
@@ -146,6 +160,53 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
                       Console.WriteLine("New User " + UserIDNewUser + " 's EOS balance is " + AssetEOS.balance);
                       Console.WriteLine("New User " + UserIDNewUser +
                                         " 's EOS address is " + AssetEOS.account_name + " " + AssetEOS.account_tag);
+                  }
+              }
+            }
+            if (cmd == "6") {
+              using (TextReader fileReader = File.OpenText(@"new_users.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(0, out UserIDNewUser);
+                      Transfer reqInfo = mixinApi.Transfer(ASSET_ID_BTC,
+                                        UserIDNewUser,
+                                        AMOUNT, PinCode,
+                                        System.Guid.NewGuid().ToString(),
+                                        "Test");
+                      Console.WriteLine(reqInfo);
+                  }
+              }
+            }
+            if (cmd == "7") {
+              using (TextReader fileReader = File.OpenText(@"new_users.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                    string UserIDNewUser;
+                    csv.TryGetField<string>(0, out UserIDNewUser);
+                    string PrivateKeyNewUser;
+                    csv.TryGetField<string>(1, out PrivateKeyNewUser);
+                    string PinTokenNewUser;
+                    csv.TryGetField<string>(2, out PinTokenNewUser);
+                    string SessionIDNewUser;
+                    csv.TryGetField<string>(3, out SessionIDNewUser);
+
+                    MixinApi mixinApiNewUser = new MixinApi();
+                    mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                    Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+                    Transfer reqInfo = mixinApiNewUser.Transfer(ASSET_ID_BTC,
+                                            MASTER_UUID,
+                                            AMOUNT,
+                                            "123456",
+                                            System.Guid.NewGuid().ToString(),
+                                            "Test");
+                    Console.WriteLine(reqInfo);
                   }
               }
             }
