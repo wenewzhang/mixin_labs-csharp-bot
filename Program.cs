@@ -44,7 +44,7 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
 -----END RSA PRIVATE KEY-----";
     public static string MASTER_ID       = "37222956";
     public static string MASTER_UUID     = "0b4f49dc-8fb4-4539-9a89-fb3afc613747";
-    public static string ASSET_ID_BTC    = "965e5c6e-434c-3fa9-b780-c50f43cd955c";
+    public static string ASSET_ID_BTC    = "c6d0c728-2624-429b-8e0d-d9d19b6592fa";
     public static string ASSET_ID_EOS    = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d";
     public static string BTC_WALLET_ADDR = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C";
     public static string AMOUNT          = "0.001";
@@ -74,7 +74,7 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
             string PromptMsg;
             PromptMsg  = "1: Create user and update PIN\n2: Read Bitcoin balance \n3: Read Bitcoin Address\n4: Read EOS balance\n";
           	PromptMsg += "5: Read EOS address\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n";
-          	PromptMsg += "8: Withdraw bot's Bitcoin\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
+          	PromptMsg += "8: Withdraw bot's Bitcoin\n8: Withdraw bot's EOS\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
           	PromptMsg += "q: Exit \nMake your choose:";
             // Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
             do {
@@ -95,6 +95,7 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
 
               var user = mixinApi.APPUser("Csharp" + (new Random().Next() % 100) + " Cat", pk);
               Console.WriteLine(user);
+
               using (var writer = new StreamWriter("new_users.csv",append: true))
               using (var csv = new CsvWriter(writer))
               {
@@ -112,6 +113,11 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
                   csv.WriteField(user.session_id);
                   csv.NextRecord();
                   csv.Flush();
+
+//Update the pincode of New user
+                  MixinApi mixinApiNewUser = new MixinApi();
+                  mixinApiNewUser.Init(user.user_id, "", user.session_id, user.pin_token, pemText.ToString());
+                  Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
               }
             }
             if (cmd == "2" || cmd == "3") {
@@ -199,7 +205,7 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
 
                     MixinApi mixinApiNewUser = new MixinApi();
                     mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
-                    Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+                    // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
                     Transfer reqInfo = mixinApiNewUser.Transfer(ASSET_ID_BTC,
                                             MASTER_UUID,
                                             AMOUNT,
@@ -210,7 +216,35 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
                   }
               }
             }
-            if (cmd == "q") { break; }
+            if (cmd == "8") {
+              var addr = mixinApi.CreateAddress(ASSET_ID_BTC, BTC_WALLET_ADDR, "BTC withdraw", null, null, PinCode);
+              Console.WriteLine(addr);
+              // Console.WriteLine(mixinApi.Withdrawal(addr.address_id,AMOUNT,PinCode,System.Guid.NewGuid().ToString(), "Test withdraw"));
+            }
+            if (cmd == "9") {
+              var addr = mixinApi.CreateAddress(null, null, "EOS withdraw", "eoswithmixin", "d80363afcc466fbaf2daa7328ae2adfa", PinCode);
+              Console.WriteLine(addr);
+              // Console.WriteLine(mixinApi.Withdrawal(addr.address_id,AMOUNT,PinCode,System.Guid.NewGuid().ToString(), "Test withdraw"));
+            }
+            if (cmd == "q") { break;}
+            if (cmd == "d") {
+              var addr = mixinApi.CreateAddress(ASSET_ID_BTC, BTC_WALLET_ADDR, "BTC withdraw", null, null, PinCode);
+              Console.WriteLine(addr);
+              Console.WriteLine(mixinApi.DeleteAddress(PinCode, addr.address_id));
+            }
+            if (cmd == "r") {
+              var addr = mixinApi.CreateAddress(ASSET_ID_BTC, BTC_WALLET_ADDR, "BTC withdraw", null, null, PinCode);
+              Console.WriteLine(addr);
+              Console.WriteLine(mixinApi.ReadAddress(addr.address_id));
+            }
+            if (cmd == "qs") {
+              var assets = mixinApi.ReadAssets();
+              foreach (var asset in assets)
+              {
+                 Console.WriteLine(asset.ToString());
+                 Console.WriteLine();
+              }
+            }
             if (cmd == "s") {
               var u = mixinApi.SearchUser("37222956");
               Console.WriteLine(u);
