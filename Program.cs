@@ -42,8 +42,11 @@ z0W0oxdnzuh4vcdlIYkFgL+Nv0vlnWvVjGLJzkzYqbwuAacKjkE01TnB9l8M6HVT
 Co2hNN68Fsj6A4Oh4ZcCQEBswM6RS/X6DmsyX0o/hac/7FWjrlJu0IWx8mit0cEE
 MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
 -----END RSA PRIVATE KEY-----";
-    public static string ASSET_ID_BTC = "c6d0c728-2624-429b-8e0d-d9d19b6592fa";
-
+    public static string MASTER_ID       = "37222956";
+    public static string MASTER_UUID     = "0b4f49dc-8fb4-4539-9a89-fb3afc613747";
+    public static string ASSET_ID_BTC    = "c6d0c728-2624-429b-8e0d-d9d19b6592fa";
+    public static string ASSET_ID_EOS    = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d";
+    public static string BTC_WALLET_ADDR = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C";
         static void Main(string[] args)
         {
             MixinApi mixinApi = new MixinApi();
@@ -115,15 +118,34 @@ MTvukq+k3M9xkAhWuvXAEOUcxrFYE0vPWQIJUzYwNqk=
                       MixinApi mixinApiNewUser = new MixinApi();
                       mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
                       Asset AssetBTC = mixinApiNewUser.ReadAsset(ASSET_ID_BTC);
-                      Console.WriteLine("New User " + UserIDNewUser + " 's balance is " + AssetBTC.balance);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's BTC balance is " + AssetBTC.balance);
                       Console.WriteLine("New User " + UserIDNewUser + " 's BTC address is " + AssetBTC.public_key);
-                      // Console.WriteLine();
-                      // Console.WriteLine(UserID);
-                      // Console.WriteLine(PrivateKey);
-                      // for (int i = 0; csv.TryGetField<string>(i, out value); i++)
-                      // {
-                          // Console.WriteLine(value);
-                      // }
+                  }
+              }
+            }
+            if (cmd == "4" || cmd == "5") {
+              string value;
+              using (TextReader fileReader = File.OpenText(@"new_users.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(0, out UserIDNewUser);
+                      string PrivateKeyNewUser;
+                      csv.TryGetField<string>(1, out PrivateKeyNewUser);
+                      string PinTokenNewUser;
+                      csv.TryGetField<string>(2, out PinTokenNewUser);
+                      string SessionIDNewUser;
+                      csv.TryGetField<string>(3, out SessionIDNewUser);
+
+                      MixinApi mixinApiNewUser = new MixinApi();
+                      mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                      Asset  AssetEOS = mixinApiNewUser.ReadAsset(ASSET_ID_EOS);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's EOS balance is " + AssetEOS.balance);
+                      Console.WriteLine("New User " + UserIDNewUser +
+                                        " 's EOS address is " + AssetEOS.account_name + " " + AssetEOS.account_tag);
                   }
               }
             }
