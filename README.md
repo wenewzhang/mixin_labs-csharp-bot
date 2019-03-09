@@ -13,13 +13,12 @@ Full Mixin network resource [index](https://github.com/awesome-mixin-network/ind
 ### C# installation:
 Download the latest .Net Core [.Net Core](https://dotnet.microsoft.com/download) from here.
 
-macOS
+**macOS**
 
 Download [dotnet-sdk-2.2](https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-2.2.104-macos-x64-installer) and double click the package to install it.
 
+**Ubuntu**
 
-
-Ubuntu 16.04
 Open a terminal and run the following commands:
 ```bash
 wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb

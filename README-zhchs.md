@@ -17,13 +17,12 @@
 ### C# 安装:
 下载安装最新的 .Net Core SDK [.Net Core](https://dotnet.microsoft.com/download).
 
-macOS
+**macOS**
 
 下载 [dotnet-sdk-2.2](https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-2.2.104-macos-x64-installer) 双击安装包然后安装.
 
+**Ubuntu**
 
-
-Ubuntu 16.04
 打开终端然后按下面的流程安装
 ```bash
 wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
