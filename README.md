@@ -98,8 +98,9 @@ After app is created in dashboard, you still need to [generate parameter](https:
 and write down required content, these content will be written into main.go file.
 
 ![mixin_network-keys](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/mixin_network-keys.jpg)
-In the folder, create a file: main.go  Copy the following content into it.
+In the folder, create a file: config.cs  Copy the following content into it.
 > config.cs
+
 ```csharp
 
 namespace echo_bot
