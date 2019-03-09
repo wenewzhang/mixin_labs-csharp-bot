@@ -105,6 +105,7 @@ config.cs中.
 ![mixin_network-keys](https://github.com/wenewzhang/mixin_labs-php-bot/raw/master/mixin_network-keys.jpg)
 config.cs,将生成的参数，替换成你的！
 > config.cs
+
 ```csharp
 
 namespace echo_bot
@@ -136,9 +137,10 @@ MpobtV1a7IgJGyt5HxBzgNlBNOayICRf0rRjvCdw6aTP
 }
 
 ```
-Replace the value with content generated in dashboard.
 
-Full source code like below:
+
+Program.cs 的代码如下:
+
 ```csharp
 using System;
 using System.Collections.Generic;
