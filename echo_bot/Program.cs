@@ -60,7 +60,30 @@ namespace echo_bot
                   System.Console.WriteLine("Send echo with message id:" + thisMessageId);
                   callback.SendTextMessage(incomingMessage.data.conversation_id, clearText,thisMessageId);
                 }
+                if (incomingMessage.data.category == "SYSTEM_ACCOUNT_SNAPSHOT") {
+                  byte[] strOriginal = Convert.FromBase64String(incomingMessage.data.data);
+                  string clearText = System.Text.Encoding.UTF8.GetString(strOriginal);
+                  Console.WriteLine(clearText);
+                  Transfer trsInfo = JsonConvert.DeserializeObject<Transfer>(clearText);
+                  Console.WriteLine(trsInfo.asset_id);
+                  Console.WriteLine(trsInfo.opponent_id);
+                  Console.WriteLine(trsInfo.amount);
 
+                  MixinApi mixinHttpsApi = new MixinApi();
+                  mixinHttpsApi.Init(USRCONFIG.ClientId,
+                                     USRCONFIG.ClientSecret,
+                                     USRCONFIG.SessionId,
+                                     USRCONFIG.PinToken,
+                                     USRCONFIG.PrivateKey);
+
+                  Transfer reqInfo = mixinHttpsApi.Transfer(trsInfo.asset_id,
+                                                      trsInfo.opponent_id,
+                                                      trsInfo.amount,
+                                                      USRCONFIG.PinCode,
+                                                      System.Guid.NewGuid().ToString(),
+                                                      "");
+                  Console.WriteLine(reqInfo);
+                }
             }
             // Console.WriteLine(incomingMessage);
             if (incomingMessage.action == "ACKNOWLEDGE_MESSAGE_RECEIPT")
