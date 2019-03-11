@@ -262,6 +262,27 @@ if ( (incomingMessage.action == "CREATE_MESSAGE") && (incomingMessage.data != nu
 
 }
 ```
+## Advanced usage
+In some scenarios, you want trace the message delivery status, Mixin Messenger provide two status:
+- **DELIVERED**  just delivered to user.
+- **READ**  user has read it.
+```csharp
+if (incomingMessage.action == "ACKNOWLEDGE_MESSAGE_RECEIPT")
+{
+    if (incomingMessage.data != null) {
+      System.Console.WriteLine("The message delivery status: " +
+                                incomingMessage.data.message_id + " "
+                                + incomingMessage.data.status);
+    }
+}
+```
+
+Output like below:
+```bash
+Send echo with message id:cb686aac-e3bb-4530-8ed1-7fd580464bbd
+The message delivery status: cb686aac-e3bb-4530-8ed1-7fd580464bbd DELIVERED
+The message delivery status: cb686aac-e3bb-4530-8ed1-7fd580464bbd READ
+```
 
 Not only texts, images and other type message will be pushed to your bot. You can find more [details](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/) about Messenger message.
 
