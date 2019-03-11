@@ -25,6 +25,8 @@ namespace echo_bot
             Console.WriteLine("\n\n======== Test Read Profile ===========\n");
             Console.WriteLine(mixinApi.ReadProfile());
 
+            Console.WriteLine("\n\n======== Test Verify PIN ===========\n");
+            Console.WriteLine(mixinApi.VerifyPIN(USRCONFIG.PinCode).ToString());
 
             mixinApi.WebSocketConnect(HandleOnRecivedMessage).Wait();
 
@@ -42,11 +44,8 @@ namespace echo_bot
 
         static void HandleOnRecivedMessage(object sender, EventArgs args, string message)
         {
-
-            //System.Console.WriteLine(message);
             var incomingMessage = JsonConvert.DeserializeObject<RecvWebSocketMessage>(message);
-            // Console.WriteLine("incomingMessage");
-            // Console.WriteLine(incomingMessage);
+            Console.WriteLine(incomingMessage);
             if ( (incomingMessage.action == "CREATE_MESSAGE") && (incomingMessage.data != null) ) {
                 // Console.WriteLine(incomingMessage.data.conversation_id);
                 MixinApi callback = (MixinApi)sender;
@@ -58,7 +57,22 @@ namespace echo_bot
                   Console.WriteLine(clearText);
                   string thisMessageId = Guid.NewGuid().ToString();
                   System.Console.WriteLine("Send echo with message id:" + thisMessageId);
-                  callback.SendTextMessage(incomingMessage.data.conversation_id, clearText,thisMessageId);
+                  if (clearText == "a") {
+                    AppCard appCard      = new AppCard();
+                    appCard.title        = "Pay BTC 0.0001";
+                    appCard.icon_url     = "https://images.mixin.one/HvYGJsV5TGeZ-X9Ek3FEQohQZ3fE9LBEBGcOcn4c4BNHovP4fW4YB97Dg5LcXoQ1hUjMEgjbl1DPlKg1TW7kK6XP=s128";
+                    appCard.description  = "hi";
+                    appCard.action       = "https://mixin.one/pay?recipient=" +
+                              							 USRCONFIG.ClientId  + "&asset=" +
+                              							 "c6d0c728-2624-429b-8e0d-d9d19b6592fa"   +
+                              							 "&amount=" + "0.001" +
+                              							 "&trace="  + System.Guid.NewGuid().ToString() +
+                              							 "&memo=";
+                    callback.SendAppCardMessage(incomingMessage.data.conversation_id,appCard);
+                  } else if (clearText == "g") {
+
+                  } else  callback.SendTextMessage(incomingMessage.data.conversation_id, clearText,thisMessageId);
+
                 }
                 if (incomingMessage.data.category == "SYSTEM_ACCOUNT_SNAPSHOT") {
                   byte[] strOriginal = Convert.FromBase64String(incomingMessage.data.data);
@@ -69,14 +83,7 @@ namespace echo_bot
                   Console.WriteLine(trsInfo.opponent_id);
                   Console.WriteLine(trsInfo.amount);
 
-                  MixinApi mixinHttpsApi = new MixinApi();
-                  mixinHttpsApi.Init(USRCONFIG.ClientId,
-                                     USRCONFIG.ClientSecret,
-                                     USRCONFIG.SessionId,
-                                     USRCONFIG.PinToken,
-                                     USRCONFIG.PrivateKey);
-
-                  Transfer reqInfo = mixinHttpsApi.Transfer(trsInfo.asset_id,
+                  Transfer reqInfo = callback.Transfer(trsInfo.asset_id,
                                                       trsInfo.opponent_id,
                                                       trsInfo.amount,
                                                       USRCONFIG.PinCode,
