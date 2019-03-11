@@ -6,7 +6,7 @@ Full Mixin network resource [index](https://github.com/awesome-mixin-network/ind
 
 ## What you will learn from this tutorial
 1. [How to create bot in Mixin messenger and reply message to user](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README-zhchs.md)
-2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](#)
+2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README2.md)
 3. [How to create a Bitcoin wallet based on Mixin Network API](#)
 ## How to create bot in Mixin messenger and reply message to user
 
@@ -290,3 +290,5 @@ Not only texts, images and other type message will be pushed to your bot. You ca
 Now your bot worked. You can hack it.
 
 Full code is [here](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/echo_bot/Program.cs)
+
+## [How to receive Bitcoin and send Bitcoin in Mixin Messenger](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README2.md)

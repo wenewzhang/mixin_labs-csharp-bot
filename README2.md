@@ -243,4 +243,4 @@ Maybe a group of buttons too simple for you, try a pay link which show a icon: A
 ```
 ![APP_CARD](https://github.com/wenewzhang/mixin_labs-python-bot/blob/master/app_card.jpg)
 
-[Full source code](https://github.com/wenewzhang/mixin_labs-csharp-bot/echo_bot/blob/master/Program.cs)
+Full code is [here](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/echo_bot/Program.cs)
