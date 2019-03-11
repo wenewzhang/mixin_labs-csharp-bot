@@ -24,17 +24,8 @@ namespace echo_bot
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("======== Mixin C# SDK Test ========= \n");
             MixinApi mixinApi = new MixinApi();
             mixinApi.Init(USRCONFIG.ClientId, USRCONFIG.ClientSecret, USRCONFIG.SessionId, USRCONFIG.PinToken, USRCONFIG.PrivateKey);
-
-            Console.WriteLine("======== Initiation Finished ========= \n");
-
-            Console.WriteLine("\n\n======== Test Read Profile ===========\n");
-            Console.WriteLine(mixinApi.ReadProfile());
-
-            Console.WriteLine("\n\n======== Test Verify PIN ===========\n");
-            Console.WriteLine(mixinApi.VerifyPIN(USRCONFIG.PinCode).ToString());
 
             mixinApi.WebSocketConnect(HandleOnRecivedMessage).Wait();
 
@@ -148,8 +139,8 @@ namespace echo_bot
 ### 你好, 比特币!
 
 在项目目录下编译并执行
-- **dot build**  build the project.
-- **dotnet bin/Debug/netcoreapp2.0/echo_bot.dll** run it.
+- **dot build**  编译项目.
+- **dotnet bin/Debug/netcoreapp2.0/echo_bot.dll** 运行机器人程序.
 ```bash
 wenewzha:echo_bot wenewzhang$ dotnet build
 Microsoft (R) Build Engine version 15.9.20+g88f5fadfbe for .NET Core
