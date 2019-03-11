@@ -264,6 +264,27 @@ if ( (incomingMessage.action == "CREATE_MESSAGE") && (incomingMessage.data != nu
 
 }
 ```
+## 高级用法
+在有些应用场景，发给用户的消息是非常重要的，你想知道发出的消息是不是发送成功了，用户是不是已经读了，Mixin Messenger提供两种状态：
+- **DELIVERED** 发送成功
+- **READ**  用户已经读过消息
+```csharp
+if (incomingMessage.action == "ACKNOWLEDGE_MESSAGE_RECEIPT")
+{
+    if (incomingMessage.data != null) {
+      System.Console.WriteLine("The message delivery status: " +
+                                incomingMessage.data.message_id + " "
+                                + incomingMessage.data.status);
+    }
+}
+```
+
+程序运行的状态如下：
+```bash
+Send echo with message id:cb686aac-e3bb-4530-8ed1-7fd580464bbd
+The message delivery status: cb686aac-e3bb-4530-8ed1-7fd580464bbd DELIVERED
+The message delivery status: cb686aac-e3bb-4530-8ed1-7fd580464bbd READ
+```
 
 Mixin Messenger支持的消息类型很多，除了文本，还有图片，视频，语音等等，具体可到下面链接查看:  [WebSocket消息类型](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/).
 
