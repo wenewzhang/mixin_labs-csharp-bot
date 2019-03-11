@@ -106,14 +106,15 @@ namespace echo_bot
                   Console.WriteLine(trsInfo.asset_id);
                   Console.WriteLine(trsInfo.opponent_id);
                   Console.WriteLine(trsInfo.amount);
-
-                  Transfer reqInfo = callback.Transfer(trsInfo.asset_id,
-                                                      trsInfo.opponent_id,
-                                                      trsInfo.amount,
-                                                      USRCONFIG.PinCode,
-                                                      System.Guid.NewGuid().ToString(),
-                                                      "");
-                  Console.WriteLine(reqInfo);
+                  if ( Int32.Parse(trsInfo.amount) > 0 ) {
+                    Transfer reqInfo = callback.Transfer(trsInfo.asset_id,
+                                                        trsInfo.opponent_id,
+                                                        trsInfo.amount,
+                                                        USRCONFIG.PinCode,
+                                                        System.Guid.NewGuid().ToString(),
+                                                        "");
+                    Console.WriteLine(reqInfo);
+                  }
                 }
             }
             // Console.WriteLine(incomingMessage);
