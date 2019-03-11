@@ -48,7 +48,7 @@ namespace echo_bot
             Console.WriteLine("incomingMessage");
             Console.WriteLine(incomingMessage);
             if ( (incomingMessage.action == "CREATE_MESSAGE") && (incomingMessage.data != null) ) {
-                // Console.WriteLine(incomingMessage.data.conversation_id);
+                Console.WriteLine(incomingMessage.data.conversation_id);
                 MixinApi callback = (MixinApi)sender;
                 //send ack for every Create Message!
                 callback.SendMessageResponse(incomingMessage.data.message_id).Wait();
@@ -62,12 +62,10 @@ namespace echo_bot
                 }
 
             }
-            // Console.WriteLine(incomingMessage);
+            Console.WriteLine(incomingMessage);
             if (incomingMessage.action == "ACKNOWLEDGE_MESSAGE_RECEIPT")
             {
-                if (incomingMessage.data != null) {
-                  System.Console.WriteLine("This message has read already: " + incomingMessage.data.message_id);
-                }
+                System.Console.WriteLine("This message has read already: " + incomingMessage.data.message_id);
             }
             if (incomingMessage.action == "LIST_PENDING_MESSAGES")
             {
