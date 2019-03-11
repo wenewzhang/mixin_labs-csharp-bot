@@ -70,7 +70,31 @@ namespace echo_bot
                               							 "&memo=";
                     callback.SendAppCardMessage(incomingMessage.data.conversation_id,appCard);
                   } else if (clearText == "g") {
+                    List<AppButton> appBtnList = new List<AppButton>();
+                    string payLinkEOS = "https://mixin.one/pay?recipient=" +
+                        							 USRCONFIG.ClientId  + "&asset=" +
+                        							 "6cfe566e-4aad-470b-8c9a-2fd35b49c68d"   +
+                        							 "&amount=" + "0.1" +
+                        							 "&trace="  + System.Guid.NewGuid().ToString() +
+                        							 "&memo=";
+              		  string payLinkBTC = "https://mixin.one/pay?recipient=" +
+                        							 USRCONFIG.ClientId  + "&asset=" +
+                        							 "c6d0c728-2624-429b-8e0d-d9d19b6592fa"   +
+                        							 "&amount=" + "0.001" +
+                        							 "&trace="  + System.Guid.NewGuid().ToString() +
+                        							 "&memo=";
+                    AppButton btnBTC = new AppButton();
+                    btnBTC.label     = "Pay BTC 0.001";
+                    btnBTC.color     = "#0080FF";
+                    btnBTC.action    = payLinkBTC;
 
+                    AppButton btnEOS = new AppButton();
+                    btnEOS.label     = "Pay EOS 0.1";
+                    btnEOS.color     = "#8000FF";
+                    btnEOS.action    = payLinkEOS;
+                    appBtnList.Add(btnBTC);
+                    appBtnList.Add(btnEOS);
+              			callback.SendAppButtonGroupMessage(incomingMessage.data.conversation_id,appBtnList);
                   } else  callback.SendTextMessage(incomingMessage.data.conversation_id, clearText,thisMessageId);
 
                 }
