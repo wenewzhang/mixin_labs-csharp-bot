@@ -45,8 +45,8 @@ namespace echo_bot
 
             //System.Console.WriteLine(message);
             var incomingMessage = JsonConvert.DeserializeObject<RecvWebSocketMessage>(message);
-            Console.WriteLine("incomingMessage");
-            Console.WriteLine(incomingMessage);
+            // Console.WriteLine("incomingMessage");
+            // Console.WriteLine(incomingMessage);
             if ( (incomingMessage.action == "CREATE_MESSAGE") && (incomingMessage.data != null) ) {
                 // Console.WriteLine(incomingMessage.data.conversation_id);
                 MixinApi callback = (MixinApi)sender;
@@ -89,7 +89,9 @@ namespace echo_bot
             if (incomingMessage.action == "ACKNOWLEDGE_MESSAGE_RECEIPT")
             {
                 if (incomingMessage.data != null) {
-                  System.Console.WriteLine("This message has read already: " + incomingMessage.data.message_id);
+                  System.Console.WriteLine("The message delivery status: " +
+                                            incomingMessage.data.message_id + " "
+                                            + incomingMessage.data.status);
                 }
             }
             if (incomingMessage.action == "LIST_PENDING_MESSAGES")
