@@ -1,5 +1,5 @@
 # C# Bitcoin tutorial based on Mixin Network : Create a Bitcoin wallet
-![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/Bitcoin_go.jpg)
+![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/BItcoin_C#.jpg)
 We have created a bot to [echo message](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README.md) and [echo Bitcoin](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README2.md).
 
 # What you will learn from this chapter
@@ -9,7 +9,8 @@ We have created a bot to [echo message](https://github.com/wenewzhang/mixin_labs
 4. How to send Bitcoin to other wallet
 
 
-Pre-request: You should have a Mixin Network account. Create an account can be done by one line code:
+Pre-request: You should have a Mixin Network account.
+Create an account code like below:
 
 ```csharp
 var kpgen = new RsaKeyPairGenerator();
@@ -193,6 +194,8 @@ The API result contains the withdrawal address ID, fee is 0.0034802 BTC.
 'updated_at': '2019-02-26T00:03:05.028140704Z'}}
 ```
 If you want create a EOS address, call it like below:
+- **eoswithmixin** eoswithmixin is account name.
+- **d80363afcc466fbaf2daa7328ae2adfa** d80363afcc466fbaf2daa7328ae2adfa is account tag.
 ```csharp
 var addr = mixinApi.CreateAddress(null, null, "EOS withdraw", "eoswithmixin", "d80363afcc466fbaf2daa7328ae2adfa", PinCode);
 Console.WriteLine(addr);
