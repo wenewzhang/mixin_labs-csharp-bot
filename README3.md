@@ -212,6 +212,6 @@ Submit the withdrawal request to Mixin Network, the "addr.address_id" is the add
 ```csharp
  Console.WriteLine(mixinApi.Withdrawal(addr.address_id,AMOUNT,PinCode,System.Guid.NewGuid().ToString(), "Test withdraw"));
 ```
-#### Confirm the transaction in blockchain explore
+#### Confirm the transaction in blockchain explorer
 
 [Full source code](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/mixin_labs-csharp-bot/Program.cs)
