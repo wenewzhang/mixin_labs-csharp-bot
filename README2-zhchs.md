@@ -241,3 +241,4 @@ if ( Int32.Parse(trsInfo.amount) > 0 ) {
 ![APP_CARD](https://github.com/wenewzhang/mixin_labs-python-bot/raw/master/app_card.jpg)
 
 [完整代码](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/echo_bot/Program.cs)
+[创建比特币钱包](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README3-zhchs.md)
