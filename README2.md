@@ -164,10 +164,10 @@ wenewzha:echo_bot wenewzhang$ dotnet bin/Debug/netcoreapp2.0/echo_bot.dll
 The bot is listening!
 ```
 Developer can send Bitcoin to their bots in message panel. The bot receive the Bitcoin and then send back immediately.
-![transfer and tokens](https://github.com/wenewzhang/mixin_network-nodejs-bot2/blob/master/transfer-any-tokens.jpg)
+![transfer and tokens](https://github.com/wenewzhang/mixin_network-nodejs-bot2/raw/master/transfer-any-tokens.jpg)
 
 User can pay 0.001 Bitcoin to bot by click the button and the 0.001 Bitcoin will be refunded in 1 second,In fact, user can pay any coin either.
-![pay-link](https://github.com/wenewzhang/mixin_network-nodejs-bot2/blob/master/Pay_and_refund_quickly.jpg)
+![pay-link](https://github.com/wenewzhang/mixin_network-nodejs-bot2/raw/master/Pay_and_refund_quickly.jpg)
 
 ## Source code summary
 ```csharp
@@ -238,8 +238,8 @@ Maybe a group of buttons too simple for you, try a pay link which show a icon: A
                            "&memo=";
   callback.SendAppCardMessage(incomingMessage.data.conversation_id,appCard);
 ```
-![APP_CARD](https://github.com/wenewzhang/mixin_labs-python-bot/blob/master/app_card.jpg)
+![APP_CARD](https://github.com/wenewzhang/mixin_labs-python-bot/raw/master/app_card.jpg)
 
 Full code is [here](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/echo_bot/Program.cs)
 
-[How to create a Bitcoin wallet based on Mixin Network API](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README2.md) 
+[How to create a Bitcoin wallet based on Mixin Network API](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README3.md) 
