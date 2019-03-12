@@ -229,7 +229,7 @@ The bot is listening!
 
 Add the bot(for example, this bot id is 7000101639) as your friend in [Mixin Messenger](https://mixin.one/messenger) and send your messages.
 
-![mixin_messenger](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/helloworld.jpeg)
+![mixin_messenger](https://github.com/wenewzhang/mixin_labs-php-bot/raw/master/helloworld.jpeg)
 
 ### Source code explanation
 Initial the Mixin Api with basic information.
@@ -263,7 +263,7 @@ if ( (incomingMessage.action == "CREATE_MESSAGE") && (incomingMessage.data != nu
 }
 ```
 ## Advanced usage
-In some scenarios, you want trace the message delivery status, Mixin Messenger provide two status:
+Mixin Messenger will send message status to you if you send message to Mixin messenger user:
 - **DELIVERED**  just delivered to user.
 - **READ**  user has read it.
 ```csharp
