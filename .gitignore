@@ -3,3 +3,5 @@ obj
 bin
 new_users.csv
 .DS_Store
+bitcoin_wallet/obj
+bitcoin_wallet/bin
