@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="msgpack.light" Version="1.6.2" />
+    <PackageReference Include="SimpleMsgPack" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
