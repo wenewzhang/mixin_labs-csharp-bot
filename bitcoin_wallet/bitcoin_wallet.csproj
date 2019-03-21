@@ -8,5 +8,12 @@
   <ItemGroup>
     <PackageReference Include="SimpleMsgPack" Version="1.0.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="MixinCSharpSdk" Version="0.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.4" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+  </ItemGroup>
 </Project>
