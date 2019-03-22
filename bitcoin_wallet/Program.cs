@@ -55,7 +55,7 @@ namespace bitcoin_wallet
                           USRCONFIG.PrivateKey);
             string PromptMsg;
             PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance & address \n3: Read USDT balance & address\n4: Read EOS balance & address\n";
-            PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n";
+            PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n";
             PromptMsg += "v: Verify Wallet Pin\na: Verify Bot Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
             PromptMsg += "q: Exit \nMake your choose:";
             // Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
@@ -239,6 +239,67 @@ namespace bitcoin_wallet
                       Console.WriteLine(reqInfo);
                     }
                 }
+            }
+            if (cmd == "6" ) {
+                var memo = TargetAssetID(USRCONFIG.ASSET_ID_BTC);
+                Console.WriteLine(memo);
+                using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+                {
+                    var csv = new CsvReader(fileReader);
+                    csv.Configuration.HasHeaderRecord = false;
+                    while (csv.Read())
+                    {
+                      string PrivateKeyNewUser;
+                      csv.TryGetField<string>(0, out PrivateKeyNewUser);
+                      string PinTokenNewUser;
+                      csv.TryGetField<string>(1, out PinTokenNewUser);
+                      string SessionIDNewUser;
+                      csv.TryGetField<string>(2, out SessionIDNewUser);
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(3, out UserIDNewUser);
+                      string PinNewUser;
+                      csv.TryGetField<string>(4, out PinNewUser);
+                      MixinApi mixinApiNewUser = new MixinApi();
+                      mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                      // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+                      Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
+                                              USRCONFIG.EXIN_BOT,
+                                              "1",
+                                              PinNewUser.ToString(),
+                                              System.Guid.NewGuid().ToString(),
+                                              memo);
+                      Console.WriteLine(reqInfo);
+                    }
+                }
+            }
+            if (cmd == "7" ) {
+              using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                    string PrivateKeyNewUser;
+                    csv.TryGetField<string>(0, out PrivateKeyNewUser);
+                    string PinTokenNewUser;
+                    csv.TryGetField<string>(1, out PinTokenNewUser);
+                    string SessionIDNewUser;
+                    csv.TryGetField<string>(2, out SessionIDNewUser);
+                    string UserIDNewUser;
+                    csv.TryGetField<string>(3, out UserIDNewUser);
+                    string PinNewUser;
+                    csv.TryGetField<string>(4, out PinNewUser);
+                    MixinApi mixinApiNewUser = new MixinApi();
+                    mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                    // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+                    var snaps = mixinApiNewUser.NetworkSnapshots(200, "2019-03-22T13:34:05.999999999-07:00", USRCONFIG.ASSET_ID_USDT, null, true);
+                    foreach (var sn in snaps)
+                    {
+                        Console.WriteLine(sn.ToString());
+                        Console.WriteLine();
+                    }
+                  }
+              }
             }
           } while (true);
         }
