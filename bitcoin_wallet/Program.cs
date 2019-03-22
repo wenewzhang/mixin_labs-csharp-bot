@@ -29,7 +29,7 @@ namespace bitcoin_wallet
           // php: gaFBxBCBWwsaJ2Q3No+qQtaU+mIK
           // c#:      xBCBWwsaJ2Q3No+qQtaU+mIK
 
-         // "815b0b1a-2764-3736-8faa-42d694fa620a"
+         // "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
           //php: gaFBxBDG0McoJiRCm44N2dGbZZL6
           // C#:     xBDG0McoJiRCm44N2dGbZZL6
             Console.WriteLine("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
@@ -54,7 +54,7 @@ namespace bitcoin_wallet
                           USRCONFIG.PinToken,
                           USRCONFIG.PrivateKey);
             string PromptMsg;
-            PromptMsg  = "1: Create user and update PIN\n2: Read Bitcoin balance \n3: Read Bitcoin Address\n4: Read EOS balance\n";
+            PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance & address \n3: Read USDT balance & address\n4: Read EOS balance & address\n";
             PromptMsg += "5: Read EOS address\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n";
             PromptMsg += "8: Withdraw bot's Bitcoin\n8: Withdraw bot's EOS\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
             PromptMsg += "q: Exit \nMake your choose:";
@@ -62,6 +62,7 @@ namespace bitcoin_wallet
             do {
             Console.WriteLine(PromptMsg);
             var cmd = Console.ReadLine();
+            if (cmd == "q") { break;}
             if (cmd == "1") {
               var kpgen = new RsaKeyPairGenerator();
 
@@ -81,9 +82,7 @@ namespace bitcoin_wallet
               using (var writer = new StreamWriter("mybitcoin_wallet.csv",append: true))
               using (var csv = new CsvWriter(writer))
               {
-                  csv.WriteField(user.user_id);
-
-//Write Private key to CSV
+                  //Write Private key to CSV
                   RsaPrivateCrtKeyParameters rsaParameters = (RsaPrivateCrtKeyParameters) privateKey;
                   RSACryptoServiceProvider priKey = new RSACryptoServiceProvider();
                   priKey.ImportParameters(DotNetUtilities.ToRSAParameters(rsaParameters));
@@ -93,6 +92,8 @@ namespace bitcoin_wallet
 
                   csv.WriteField(user.pin_token);
                   csv.WriteField(user.session_id);
+                  csv.WriteField(user.user_id);
+                  csv.WriteField("123456");
                   csv.NextRecord();
                   csv.Flush();
 
@@ -100,6 +101,82 @@ namespace bitcoin_wallet
                   MixinApi mixinApiNewUser = new MixinApi();
                   mixinApiNewUser.Init(user.user_id, "", user.session_id, user.pin_token, pemText.ToString());
                   Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+              }
+            }
+            if (cmd == "2" ) {
+              using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                      string PrivateKeyNewUser;
+                      csv.TryGetField<string>(0, out PrivateKeyNewUser);
+                      string PinTokenNewUser;
+                      csv.TryGetField<string>(1, out PinTokenNewUser);
+                      string SessionIDNewUser;
+                      csv.TryGetField<string>(2, out SessionIDNewUser);
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(3, out UserIDNewUser);
+                      string PinNewUser;
+                      csv.TryGetField<string>(4, out PinNewUser);
+                      MixinApi mixinApiNewUser = new MixinApi();
+                      mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                      Asset AssetBTC = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_BTC);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's BTC balance is " + AssetBTC.balance);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's BTC address is " + AssetBTC.public_key);
+                  }
+              }
+            }
+            if (cmd == "3" ) {
+              using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                      string PrivateKeyNewUser;
+                      csv.TryGetField<string>(0, out PrivateKeyNewUser);
+                      string PinTokenNewUser;
+                      csv.TryGetField<string>(1, out PinTokenNewUser);
+                      string SessionIDNewUser;
+                      csv.TryGetField<string>(2, out SessionIDNewUser);
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(3, out UserIDNewUser);
+                      string PinNewUser;
+                      csv.TryGetField<string>(4, out PinNewUser);
+                      MixinApi mixinApiNewUser = new MixinApi();
+                      mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                      Asset AssetInfo = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's USDT balance is " + AssetInfo.balance);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's USDT address is " + AssetInfo.public_key);
+                  }
+              }
+            }
+            if (cmd == "4" ) {
+              using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                      string PrivateKeyNewUser;
+                      csv.TryGetField<string>(0, out PrivateKeyNewUser);
+                      string PinTokenNewUser;
+                      csv.TryGetField<string>(1, out PinTokenNewUser);
+                      string SessionIDNewUser;
+                      csv.TryGetField<string>(2, out SessionIDNewUser);
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(3, out UserIDNewUser);
+                      string PinNewUser;
+                      csv.TryGetField<string>(4, out PinNewUser);
+                      MixinApi mixinApiNewUser = new MixinApi();
+                      mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                      Asset AssetInfo = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_EOS);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's EOS balance is " + AssetInfo.balance);
+                      Console.WriteLine("New User " + UserIDNewUser + " 's EOS address is " + AssetInfo.account_name +
+                                        " " + AssetInfo.account_tag);
+                  }
               }
             }
           } while (true);
