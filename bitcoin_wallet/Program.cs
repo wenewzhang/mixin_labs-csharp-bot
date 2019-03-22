@@ -55,8 +55,8 @@ namespace bitcoin_wallet
                           USRCONFIG.PrivateKey);
             string PromptMsg;
             PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance & address \n3: Read USDT balance & address\n4: Read EOS balance & address\n";
-            PromptMsg += "5: Read EOS address\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n";
-            PromptMsg += "8: Withdraw bot's Bitcoin\n8: Withdraw bot's EOS\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
+            PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n";
+            PromptMsg += "v: Verify Wallet Pin\na: Verify Bot Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
             PromptMsg += "q: Exit \nMake your choose:";
             // Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
             do {
@@ -179,7 +179,82 @@ namespace bitcoin_wallet
                   }
               }
             }
+            if (cmd == "v" ) {
+              using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+              {
+                  var csv = new CsvReader(fileReader);
+                  csv.Configuration.HasHeaderRecord = false;
+                  while (csv.Read())
+                  {
+                      string PrivateKeyNewUser;
+                      csv.TryGetField<string>(0, out PrivateKeyNewUser);
+                      string PinTokenNewUser;
+                      csv.TryGetField<string>(1, out PinTokenNewUser);
+                      string SessionIDNewUser;
+                      csv.TryGetField<string>(2, out SessionIDNewUser);
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(3, out UserIDNewUser);
+                      string PinNewUser;
+                      csv.TryGetField<string>(4, out PinNewUser);
+                      MixinApi mixinApiNewUser = new MixinApi();
+                      mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                      Console.WriteLine("\n\n======== Test Verify PIN ===========\n");
+                      Console.WriteLine("PIN is " + PinNewUser + " user id is " + UserIDNewUser);
+                      // Console.WriteLine(mixinApiNewUser.CreatePIN("", PinNewUser).ToString());
+                      Console.WriteLine(mixinApiNewUser.VerifyPIN(PinNewUser.ToString()).ToString());
+                  }
+              }
+            }
+            if (cmd == "a" ) {
+                Console.WriteLine(mixinApi.VerifyPIN(USRCONFIG.PinCode.ToString()).ToString());
+            }
+            if (cmd == "5" ) {
+                var memo = TargetAssetID(USRCONFIG.ASSET_ID_USDT);
+                Console.WriteLine(memo);
+                using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+                {
+                    var csv = new CsvReader(fileReader);
+                    csv.Configuration.HasHeaderRecord = false;
+                    while (csv.Read())
+                    {
+                      string PrivateKeyNewUser;
+                      csv.TryGetField<string>(0, out PrivateKeyNewUser);
+                      string PinTokenNewUser;
+                      csv.TryGetField<string>(1, out PinTokenNewUser);
+                      string SessionIDNewUser;
+                      csv.TryGetField<string>(2, out SessionIDNewUser);
+                      string UserIDNewUser;
+                      csv.TryGetField<string>(3, out UserIDNewUser);
+                      string PinNewUser;
+                      csv.TryGetField<string>(4, out PinNewUser);
+                      MixinApi mixinApiNewUser = new MixinApi();
+                      mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+                      // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+                      Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_BTC,
+                                              USRCONFIG.EXIN_BOT,
+                                              "0.0001",
+                                              PinNewUser.ToString(),
+                                              System.Guid.NewGuid().ToString(),
+                                              memo);
+                      Console.WriteLine(reqInfo);
+                    }
+                }
+            }
           } while (true);
+        }
+
+        private static string TargetAssetID(string asset_id) {
+          Guid guid = new Guid(asset_id);
+          var gbytes = guid.ToByteArray();
+          Array.Reverse(gbytes,0,4);
+          Array.Reverse(gbytes,4,2);
+          Array.Reverse(gbytes,6,2);
+
+          MsgPack msgpack = new MsgPack();
+          msgpack.SetAsBytes(gbytes);
+
+          byte[] packData = msgpack.Encode2Bytes();
+          return "gaFB" + Convert.ToBase64String(packData);
         }
         private static void ExportPrivateKey(RSACryptoServiceProvider csp, TextWriter outputStream)
         {
