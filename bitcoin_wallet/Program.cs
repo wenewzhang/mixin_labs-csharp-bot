@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
-using SimpleMsgPack;
+using MsgPack;
+using MsgPack.Serialization;
 
 using System.Collections.Generic;
 using MixinSdk;
@@ -15,7 +16,6 @@ using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto.Parameters;
 
 using System.IO;
-using System.Text;
 using CsvHelper;
 using CsvHelper.TypeConversion;
 
@@ -32,20 +32,25 @@ namespace bitcoin_wallet
          // "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
           //php: gaFBxBDG0McoJiRCm44N2dGbZZL6
           // C#:     xBDG0McoJiRCm44N2dGbZZL6
-            Console.WriteLine("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
-            Guid guid = new Guid("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
-            var gbytes = guid.ToByteArray();
-            Array.Reverse(gbytes,0,4);
-            Array.Reverse(gbytes,4,2);
-            Array.Reverse(gbytes,6,2);
-            foreach (var byt in gbytes)
-            Console.Write("{0:X2} ", byt);
+          Guid guid = new Guid("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
+          var gbytes = guid.ToByteArray();
+          Array.Reverse(gbytes,0,4);
+          Array.Reverse(gbytes,4,2);
+          Array.Reverse(gbytes,6,2);
+          // foreach (var byt in gbytes)
+          // Console.Write("{0:X2} ", byt);
 
-            MsgPack msgpack = new MsgPack();
-            msgpack.SetAsBytes(gbytes);
+          var serializer = MessagePackSerializer.Get(gbytes.GetType());
+          // Pack obj to stream.
+          var stream = new MemoryStream();
+          serializer.Pack(stream, gbytes);
+          Console.WriteLine(Convert.ToBase64String(stream.ToArray()));
 
-            byte[] packData = msgpack.Encode2Bytes();
-            Console.WriteLine(Convert.ToBase64String(packData));
+
+          string dataStr = "hqFDzQPooVCnMzkzOC42MqFGqTAuMDAwNzg3OKJGQcQQgVsLGidkNzaPqkLWlPpiCqFUoVKhT8QQGj2FYSbnSbuK4+2Fziu5Vw==";
+          var myByteArray = Convert.FromBase64String(dataStr);
+          var str = MessagePackSerializer.UnpackMessagePackObject(myByteArray);
+          Console.WriteLine(str);
 
             MixinApi mixinApi = new MixinApi();
             mixinApi.Init(USRCONFIG.ClientId,
@@ -292,11 +297,18 @@ namespace bitcoin_wallet
                     MixinApi mixinApiNewUser = new MixinApi();
                     mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
                     // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
-                    var snaps = mixinApiNewUser.NetworkSnapshots(200, "2019-03-22T13:34:05.999999999-07:00", USRCONFIG.ASSET_ID_USDT, null, true);
+                    var snaps = mixinApiNewUser.NetworkSnapshots(10,"2019-03-26T01:49:52.462741863Z", "815b0b1a-2764-3736-8faa-42d694fa620a", "ASC",true);
+                    // Console.WriteLine(snaps);
                     foreach (var sn in snaps)
                     {
-                        Console.WriteLine(sn.ToString());
-                        Console.WriteLine();
+                      if ( Convert.ToDouble(sn.amount) > 0 ) {
+
+                        if ( sn.data != null ) {
+                          var memoBytes = Convert.FromBase64String(sn.data);
+                          var memoObj = MessagePackSerializer.UnpackMessagePackObject(memoBytes);
+                          Console.WriteLine(memoObj);
+                        }
+                      }
                     }
                   }
               }
@@ -311,12 +323,18 @@ namespace bitcoin_wallet
           Array.Reverse(gbytes,4,2);
           Array.Reverse(gbytes,6,2);
 
-          MsgPack msgpack = new MsgPack();
-          msgpack.SetAsBytes(gbytes);
+          // MsgPack msgpack = new MsgPack();
+          // msgpack.SetAsBytes(gbytes);
+          //
+          // byte[] packData = msgpack.Encode2Bytes();
+          // return "gaFB" + Convert.ToBase64String(packData);
+          var serializer = MessagePackSerializer.Get(gbytes.GetType());
 
-          byte[] packData = msgpack.Encode2Bytes();
-          return "gaFB" + Convert.ToBase64String(packData);
+          var stream = new MemoryStream();
+          serializer.Pack(stream, gbytes);
+          return Convert.ToBase64String(stream.ToArray());
         }
+
         private static void ExportPrivateKey(RSACryptoServiceProvider csp, TextWriter outputStream)
         {
             if (csp.PublicOnly) throw new ArgumentException("CSP does not contain a private key", "csp");
