@@ -1,4 +1,5 @@
 # How to trade bitcoin through Golang
+![cover](https://github.com/wenewzhang/mixin_labs-csharp-bot/raw/master/BItcoin_C%23.jpg)
 
 ## Solution One: pay to ExinCore API
 [Exincore](https://github.com/exinone/exincore) provide a commercial trading API on Mixin Network.
@@ -8,10 +9,10 @@ You pay USDT to ExinCore, ExinCore transfer Bitcoin to you on the fly with very 
 ExinCore don't know who you are because ExinCore only know your client's uuid.
 
 ### Pre-request:
-You should  have created a bot based on Mixin Network. Create one by reading [PHP Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-php-bot).
+You should  have created a bot based on Mixin Network. Create one by reading [C# Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-csharp-bot).
 
 #### Install required packages
-As you know, we introduce you the **mixin-sdk-go** in [chapter 1](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md), assume it has installed before, let's install **uuid, msgpack** here.
+As you know, we introduce you the **mixin-sdk-go** in [chapter 1](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README.md), assume it has installed before, let's install **uuid, msgpack** here.
 ```bash
   dotnet add package MsgPack.Cli --version 1.0.1
 ```
@@ -244,6 +245,6 @@ Build it and then run it.
 - q: Exit
 Make your choose:
 
-[Full source code](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/coin_exchange/coin_exchange.go)
+[Full source code](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/bitcoin_wallet/Program.cs)
 
 ## Solution Two: List your order on Ocean.One exchange

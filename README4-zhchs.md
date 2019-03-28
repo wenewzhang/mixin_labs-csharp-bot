@@ -1,5 +1,5 @@
 # 通过 C# 买卖Bitcoin
-![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/Bitcoin_go.jpg)
+![cover](https://github.com/wenewzhang/mixin_labs-csharp-bot/raw/master/BItcoin_C%23.jpg)
 
 ## 方案一: 通过ExinCore API进行币币交易
 [Exincore](https://github.com/exinone/exincore) 提供了基于Mixin Network的币币交易API.
@@ -9,7 +9,7 @@
 ExinCore 也不知道你是谁，它只知道你的UUID.
 
 ### 预备知识:
-你先需要创建一个机器人, 方法在 [教程一](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README-zhchs.md).
+你先需要创建一个机器人, 方法在 [教程一](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README-zhchs.md).
 
 #### 安装依赖包
 正如教程一里我们介绍过的， 我们需要依赖 **mixin-sdk-go**, 你应该先安装过它了， 这儿我们再安装 **uuid, msgpack** 两个软件包.
@@ -267,6 +267,6 @@ You got  0.3981012
 - q: Exit
 Make your choose:
 
-[完整代码](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/coin_exchange/coin_exchange.go)
+[完整代码](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/bitcoin_wallet/Program.cs)
 
 ## Solution Two: List your order on Ocean.One exchange
