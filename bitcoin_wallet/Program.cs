@@ -398,8 +398,8 @@ namespace bitcoin_wallet
         {
           HttpClient client = new HttpClient();
           // Call asynchronous network methods in a try/catch block to handle exceptions
-          // try
-          // {
+          try
+          {
              HttpResponseMessage response = await client.GetAsync("https://exinone.com/exincore/markets?base_asset=" + asset_id);
              response.EnsureSuccessStatusCode();
              string responseBody = await response.Content.ReadAsStringAsync();
@@ -407,13 +407,13 @@ namespace bitcoin_wallet
              // string responseBody = await client.GetStringAsync(uri);
              Console.WriteLine(responseBody);
              return responseBody;
-          // }
-          // catch(HttpRequestException e)
-          // {
-          //    Console.WriteLine("\nException Caught!");
-          //    Console.WriteLine("Message :{0} ",e.Message);
-          // }
-          // return "null";
+          }
+          catch(HttpRequestException e)
+          {
+             Console.WriteLine("\nException Caught!");
+             Console.WriteLine("Message :{0} ",e.Message);
+          }
+          return "null";
         }
 
         public static string HexStringToUUID(string hex) {
