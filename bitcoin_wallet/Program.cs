@@ -106,7 +106,7 @@ namespace bitcoin_wallet
             string PromptMsg;
             PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance & address \n3: Read USDT balance & address\n4: Read EOS balance & address\n";
             PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n";
-            PromptMsg += "v: Verify Wallet Pin\na: Verify Bot Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
+            PromptMsg += "v: Verify Wallet Pin\n";
             PromptMsg += "q: Exit \nMake your choose:";
             // Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
             do {
