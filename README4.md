@@ -211,9 +211,12 @@ using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
 
 If you coin exchange successful, console output like below:
 ```bash
----------------Successful----Exchange-------------
-You got  0.3981012
-815b0b1a-2764-3736-8faa-42d694fa620a  price: 3996.8  Fee: 0.0007994
+-----------Successfully--Exchange-------------
+You got 0.3923244 back!
+Price is  3938.62 Fee is 0.0007878 Percent of fee: 0.200803212851406 %
+Fee Asset uuid: 815b0b1a-2764-3736-8faa-42d694fa620a
+trace  uuid: 1a3d8561-26e7-49bb-8ae3-ed85ce2bb957
+----------end of snapshots query--------------
 ```
 
 #### Read Bitcoin balance
