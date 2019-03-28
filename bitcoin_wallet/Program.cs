@@ -3,6 +3,7 @@ using System.Text;
 using MsgPack;
 using MsgPack.Serialization;
 using System.Linq;
+using System.Net.Http;
 
 using System.Collections.Generic;
 using MixinSdk;
@@ -20,7 +21,8 @@ using System.IO;
 using CsvHelper;
 using CsvHelper.TypeConversion;
 using Newtonsoft.Json;
-
+using System.Threading;
+using System.Threading.Tasks;
 namespace bitcoin_wallet
 {
     public class ExchangeResult
@@ -38,6 +40,32 @@ namespace bitcoin_wallet
             return JsonConvert.SerializeObject(this);
         }
     }
+    public class MarketInfo
+    {
+        public string code { get; set; }
+        public string message { get; set; }
+        public List<AssetInfo> data { get; set; }
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+    public class AssetInfo
+    {
+        public string base_asset { get; set; }
+        public string base_asset_symbol { get; set; }
+        public string exchange_asset_symbol { get; set; }
+        public string price  { get; set; }
+        public string minimum_amount { get; set; }
+        public string maximum_amount  { get; set; }
+        public List<string> exchanges  { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -77,7 +105,7 @@ namespace bitcoin_wallet
                           USRCONFIG.PrivateKey);
             string PromptMsg;
             PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance & address \n3: Read USDT balance & address\n4: Read EOS balance & address\n";
-            PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n";
+            PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n";
             PromptMsg += "v: Verify Wallet Pin\na: Verify Bot Pin\nd: Create Address and Delete it\nr: Create Address and read it\n";
             PromptMsg += "q: Exit \nMake your choose:";
             // Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
@@ -343,8 +371,51 @@ namespace bitcoin_wallet
                   }
               }
             }
+            if (cmd == "8" ) {
+              string jsonData = FetchMarketPrice("815b0b1a-2764-3736-8faa-42d694fa620a");
+              var marketObj = JsonConvert.DeserializeObject<MarketInfo>(jsonData);
+              foreach (AssetInfo value in marketObj.data)
+              {
+                  Console.WriteLine(value);
+              }
+            }
+            if (cmd == "9" ) {
+              string jsonData = FetchMarketPrice("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
+              var marketObj = JsonConvert.DeserializeObject<MarketInfo>(jsonData);
+              foreach (AssetInfo value in marketObj.data)
+              {
+                  Console.WriteLine(value);
+              }
+            }
           } while (true);
         }
+
+        public static string FetchMarketPrice(string asset_id)
+        {
+            return FetchMarketPriceAsync(asset_id).Result;
+        }
+        public static async Task<string> FetchMarketPriceAsync(string asset_id)
+        {
+          HttpClient client = new HttpClient();
+          // Call asynchronous network methods in a try/catch block to handle exceptions
+          // try
+          // {
+             HttpResponseMessage response = await client.GetAsync("https://exinone.com/exincore/markets?base_asset=" + asset_id);
+             response.EnsureSuccessStatusCode();
+             string responseBody = await response.Content.ReadAsStringAsync();
+             // Above three lines can be replaced with new helper method below
+             // string responseBody = await client.GetStringAsync(uri);
+             Console.WriteLine(responseBody);
+             return responseBody;
+          // }
+          // catch(HttpRequestException e)
+          // {
+          //    Console.WriteLine("\nException Caught!");
+          //    Console.WriteLine("Message :{0} ",e.Message);
+          // }
+          // return "null";
+        }
+
         public static string HexStringToUUID(string hex) {
           if (hex.Length == 34) {
             byte[] bytes = StringToByteArray(hex.Substring(2, 32));
