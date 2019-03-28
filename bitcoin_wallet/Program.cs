@@ -2,6 +2,7 @@
 using System.Text;
 using MsgPack;
 using MsgPack.Serialization;
+using System.Linq;
 
 using System.Collections.Generic;
 using MixinSdk;
@@ -18,39 +19,55 @@ using Org.BouncyCastle.Crypto.Parameters;
 using System.IO;
 using CsvHelper;
 using CsvHelper.TypeConversion;
+using Newtonsoft.Json;
 
 namespace bitcoin_wallet
 {
+    public class ExchangeResult
+    {
+        public string C { get; set; }
+        public string P { get; set; }
+        public string F { get; set; }
+        public string FA { get; set; }
+        public string T { get; set; }
+        public string R { get; set; }
+        public string O { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
     class Program
     {
         static void Main(string[] args)
         {
-          // "815b0b1a-2764-3736-8faa-42d694fa620a"
-          // php: gaFBxBCBWwsaJ2Q3No+qQtaU+mIK
-          // c#:      xBCBWwsaJ2Q3No+qQtaU+mIK
+            // "815b0b1a-2764-3736-8faa-42d694fa620a"
+            // php: gaFBxBCBWwsaJ2Q3No+qQtaU+mIK
+            // c#:      xBCBWwsaJ2Q3No+qQtaU+mIK
 
-         // "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
-          //php: gaFBxBDG0McoJiRCm44N2dGbZZL6
-          // C#:     xBDG0McoJiRCm44N2dGbZZL6
-          Guid guid = new Guid("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
-          var gbytes = guid.ToByteArray();
-          Array.Reverse(gbytes,0,4);
-          Array.Reverse(gbytes,4,2);
-          Array.Reverse(gbytes,6,2);
-          // foreach (var byt in gbytes)
-          // Console.Write("{0:X2} ", byt);
+           // "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
+            //php: gaFBxBDG0McoJiRCm44N2dGbZZL6
+            // C#:     xBDG0McoJiRCm44N2dGbZZL6
+            Guid guid = new Guid("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
+            var gbytes = guid.ToByteArray();
+            Array.Reverse(gbytes,0,4);
+            Array.Reverse(gbytes,4,2);
+            Array.Reverse(gbytes,6,2);
+            // foreach (var byt in gbytes)
+            // Console.Write("{0:X2} ", byt);
 
-          var serializer = MessagePackSerializer.Get(gbytes.GetType());
-          // Pack obj to stream.
-          var stream = new MemoryStream();
-          serializer.Pack(stream, gbytes);
-          Console.WriteLine(Convert.ToBase64String(stream.ToArray()));
+            var serializer = MessagePackSerializer.Get(gbytes.GetType());
+            // Pack obj to stream.
+            var stream = new MemoryStream();
+            serializer.Pack(stream, gbytes);
+            Console.WriteLine(Convert.ToBase64String(stream.ToArray()));
 
 
-          string dataStr = "hqFDzQPooVCnMzkzOC42MqFGqTAuMDAwNzg3OKJGQcQQgVsLGidkNzaPqkLWlPpiCqFUoVKhT8QQGj2FYSbnSbuK4+2Fziu5Vw==";
-          var myByteArray = Convert.FromBase64String(dataStr);
-          var str = MessagePackSerializer.UnpackMessagePackObject(myByteArray);
-          Console.WriteLine(str);
+            string dataStr = "hqFDzQPooVCnMzkzOC42MqFGqTAuMDAwNzg3OKJGQcQQgVsLGidkNzaPqkLWlPpiCqFUoVKhT8QQGj2FYSbnSbuK4+2Fziu5Vw==";
+            var myByteArray = Convert.FromBase64String(dataStr);
+            var str = MessagePackSerializer.UnpackMessagePackObject(myByteArray);
+            Console.WriteLine(str);
 
             MixinApi mixinApi = new MixinApi();
             mixinApi.Init(USRCONFIG.ClientId,
@@ -306,7 +323,20 @@ namespace bitcoin_wallet
                         if ( sn.data != null ) {
                           var memoBytes = Convert.FromBase64String(sn.data);
                           var memoObj = MessagePackSerializer.UnpackMessagePackObject(memoBytes);
-                          Console.WriteLine(memoObj);
+                          Console.WriteLine(memoObj.ToString());
+
+                          var xR = JsonConvert.DeserializeObject<ExchangeResult>(memoObj.ToString());
+                          Console.WriteLine(xR.C);
+                          if (xR.C == "1000") {
+                            Console.WriteLine("-----------Successfully--Exchange-------------");
+                            Console.WriteLine("You got " + sn.amount.ToString() + " back!");
+                            Console.WriteLine("Price is  " + xR.P + " Fee is " + xR.F +
+                                              " Percent of fee: " +
+                                              Convert.ToDouble(xR.F)/Convert.ToDouble(sn.amount)*100 + " %");
+                            Console.WriteLine("Fee Asset uuid: " + HexStringToUUID(xR.FA));
+                            Console.WriteLine("trace  uuid: " + HexStringToUUID(xR.O));
+                            Console.WriteLine("----------end of snapshots query--------------");
+                          }
                         }
                       }
                     }
@@ -315,19 +345,28 @@ namespace bitcoin_wallet
             }
           } while (true);
         }
-
+        public static string HexStringToUUID(string hex) {
+          if (hex.Length == 34) {
+            byte[] bytes = StringToByteArray(hex.Substring(2, 32));
+            Array.Reverse(bytes,0,4);
+            Array.Reverse(bytes,4,2);
+            Array.Reverse(bytes,6,2);
+            Guid asset_uuid = new Guid(bytes);
+            return asset_uuid.ToString();
+          } else return null;
+        }
+        public static byte[] StringToByteArray(string hex) {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
+        }
         private static string TargetAssetID(string asset_id) {
           Guid guid = new Guid(asset_id);
           var gbytes = guid.ToByteArray();
           Array.Reverse(gbytes,0,4);
           Array.Reverse(gbytes,4,2);
           Array.Reverse(gbytes,6,2);
-
-          // MsgPack msgpack = new MsgPack();
-          // msgpack.SetAsBytes(gbytes);
-          //
-          // byte[] packData = msgpack.Encode2Bytes();
-          // return "gaFB" + Convert.ToBase64String(packData);
           var serializer = MessagePackSerializer.Get(gbytes.GetType());
 
           var stream = new MemoryStream();
