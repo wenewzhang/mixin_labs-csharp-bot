@@ -1,4 +1,4 @@
-# How to trade bitcoin through Golang
+# How to trade bitcoin through C#
 ![cover](https://github.com/wenewzhang/mixin_labs-csharp-bot/raw/master/BItcoin_C%23.jpg)
 
 ## Solution One: pay to ExinCore API
@@ -12,12 +12,13 @@ ExinCore don't know who you are because ExinCore only know your client's uuid.
 You should  have created a bot based on Mixin Network. Create one by reading [C# Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-csharp-bot).
 
 #### Install required packages
-As you know, we introduce you the **mixin-sdk-go** in [chapter 1](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README.md), assume it has installed before, let's install **uuid, msgpack** here.
+As you know, we introduce you the **mixin-csharp-sdk** in [chapter 1](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README.md), assume it has installed before, let's install **MsgPack.Cli** here.
 ```bash
+  dotnet add package MixinCSharpSdk
   dotnet add package MsgPack.Cli --version 1.0.1
 ```
 #### Deposit USDT or Bitcoin into your Mixin Network account and read balance
-ExinCore can exchange between Bitcoin, USDT, EOS, Eth etc. Here show you how to exchange between USDT and Bitcoin,
+The ExinCore can exchange between Bitcoin, USDT, EOS, ETH etc. Here show you how to exchange between USDT and Bitcoin,
 Check the wallet's balance & address before you make order.
 
 - Check the address & balance, remember it Bitcoin wallet address.

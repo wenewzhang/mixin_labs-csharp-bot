@@ -12,12 +12,13 @@ ExinCore 也不知道你是谁，它只知道你的UUID.
 你先需要创建一个机器人, 方法在 [教程一](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README-zhchs.md).
 
 #### 安装依赖包
-正如教程一里我们介绍过的， 我们需要依赖 **mixin-sdk-go**, 你应该先安装过它了， 这儿我们再安装 **uuid, msgpack** 两个软件包.
+正如教程一里我们介绍过的， 我们需要依赖 **mixin-csharp-sdk**, 你应该先安装过它了， 这儿我们再安装 **MsgPack.Cli** 软件包.
 ```bash
+  dotnet add package MixinCSharpSdk
   dotnet add package MsgPack.Cli --version 1.0.1
 ```
 #### 充币到 Mixin Network, 并读出它的余额.
-ExinCore可以进行BTC, USDT, EOS, ETH 等等交易， 这儿演示如果用 USDT购买BTC 或者 用BTC购买USDT, 交易前，先检查一下钱包地址！
+通过ExinCore API, 可以进行BTC, USDT, EOS, ETH 等等交易， 这儿演示如果用 USDT购买BTC 或者 用BTC购买USDT, 交易前，先检查一下钱包地址！
 完整的步骤如下:
 - 检查比特币或USDT的余额，钱包地址。并记下钱包地址。
 - 从第三方交易所或者你的冷钱包中，将币充到上述钱包地址。
