@@ -18,13 +18,13 @@ ExinCore 也不知道你是谁，它只知道你的UUID.
   dotnet add package MsgPack.Cli --version 1.0.1
 ```
 #### 充币到 Mixin Network, 并读出它的余额.
-通过ExinCore API, 可以进行BTC, USDT, EOS, ETH 等等交易， 这儿演示如果用 USDT购买BTC 或者 用BTC购买USDT, 交易前，先检查一下钱包地址！
+通过ExinCore API, 可以进行BTC, USDT, EOS, ETH 等等交易， 此处演示用 USDT购买BTC 或者 用BTC购买USDT。交易前，先检查一下钱包地址。
 完整的步骤如下:
 - 检查比特币或USDT的余额，钱包地址。并记下钱包地址。
 - 从第三方交易所或者你的冷钱包中，将币充到上述钱包地址。
 - 再检查一下币的余额，看到帐与否。(比特币的到帐时间是5个区块的高度，约100分钟)。
 
-请注意，比特币与USDT的地址是一样的。
+比特币与USDT的充值地址是一样的。
 
 ```csharp
   MixinApi mixinApiNewUser = new MixinApi();
@@ -35,7 +35,7 @@ ExinCore 也不知道你是谁，它只知道你的UUID.
 ```
 
 #### 查询ExinCore市场的价格信息
-如果来查询ExinCore市场的价格信息呢？你要先了解你交易的基础币是什么，如果你想买比特币，卖出USDT,那么基础货币就是USDT;如果你想买USDT,卖出比特币，那么基础货币就是比特币.
+如何来查询ExinCore市场的价格信息呢？你要先了解你交易的基础币是什么，如果你想买比特币，卖出USDT,那么基础货币就是USDT;如果你想买USDT,卖出比特币，那么基础货币就是比特币.
 ```csharp
 
 string jsonData = FetchMarketPrice("815b0b1a-2764-3736-8faa-42d694fa620a");
