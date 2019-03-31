@@ -269,8 +269,10 @@ Check the wallet's balance.
 ## Source code usage
 Build it and then run it.
 
-- **dotnet build** build project.
-- **dotnet bin/Debug/netcoreapp2.2/bitcoin_wallet.dll** run it.
+- [x] **dotnet build** build project.
+- [x] **dotnet bin/Debug/netcoreapp2.2/bitcoin_wallet.dll** run it.
+
+Commands list of this source code:
 
 - 1: Create Bitcoin Wallet and update PIN
 - 2: Read Bitcoin balance & address

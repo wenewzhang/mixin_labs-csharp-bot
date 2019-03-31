@@ -95,7 +95,7 @@ public static async Task<string> FetchMarketPriceAsync(string asset_id)
      Console.WriteLine("\nException Caught!");
      Console.WriteLine("Message :{0} ",e.Message);
   }
-  return "null";
+  return null;
 }
 ```
 
@@ -275,8 +275,10 @@ trace  uuid: 1a3d8561-26e7-49bb-8ae3-ed85ce2bb957
 ## 源代码执行
 编译执行，即可开始交易了.
 
-- **dotnet build** 编译项目.
-- **dotnet bin/Debug/netcoreapp2.2/bitcoin_wallet.dll** 运行它.
+- [x] **dotnet build** 编译项目.
+- [x] **dotnet bin/Debug/netcoreapp2.2/bitcoin_wallet.dll** 运行它.
+
+本代码执行时的命令列表:
 
 - 1: Create Bitcoin Wallet and update PIN
 - 2: Read Bitcoin balance & address
