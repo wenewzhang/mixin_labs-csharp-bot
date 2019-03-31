@@ -98,7 +98,7 @@ public static async Task<string> FetchMarketPriceAsync(string asset_id)
 ```
 
 #### Create a memo to prepare order
-The chapter two: [Echo Bitcoin](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README2.md) introduce transfer coins. But you need to let ExinCore know which coin you want to buy. Just write your target asset into memo.
+The chapter two: [Echo Bitcoin](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README2.md) introduce transfer coins. But you need to let ExinCore know which coin you want to buy. Just write your target asset into memo.
 ```csharp
 private static string TargetAssetID(string asset_id) {
   Guid guid = new Guid(asset_id);
@@ -126,6 +126,41 @@ public static string ASSET_ID_EOS = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d";
 public static string ASSET_ID_USDT= "815b0b1a-2764-3736-8faa-42d694fa620a";
 
 //Program.cs
+if (cmd == "5" ) {
+    var memo = TargetAssetID(USRCONFIG.ASSET_ID_USDT);
+    Console.WriteLine(memo);
+    using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+    {
+        var csv = new CsvReader(fileReader);
+        csv.Configuration.HasHeaderRecord = false;
+        while (csv.Read())
+        {
+          string PrivateKeyNewUser;
+          csv.TryGetField<string>(0, out PrivateKeyNewUser);
+          string PinTokenNewUser;
+          csv.TryGetField<string>(1, out PinTokenNewUser);
+          string SessionIDNewUser;
+          csv.TryGetField<string>(2, out SessionIDNewUser);
+          string UserIDNewUser;
+          csv.TryGetField<string>(3, out UserIDNewUser);
+          string PinNewUser;
+          csv.TryGetField<string>(4, out PinNewUser);
+          MixinApi mixinApiNewUser = new MixinApi();
+          mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+          // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+          Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_BTC,
+                                  USRCONFIG.EXIN_BOT,
+                                  "0.0001",
+                                  PinNewUser.ToString(),
+                                  System.Guid.NewGuid().ToString(),
+                                  memo);
+          Console.WriteLine(reqInfo);
+        }
+    }
+}
+```
+If you want sell USDT buy BTC, call it like below:
+```csharp
 if (cmd == "6" ) {
     var memo = TargetAssetID(USRCONFIG.ASSET_ID_BTC);
     Console.WriteLine(memo);
@@ -159,6 +194,7 @@ if (cmd == "6" ) {
     }
 }
 ```
+
 The ExinCore should transfer the target coin to your bot, meanwhile, put the fee, order id, price etc. information in the memo, unpack the data like below.
 - **NetworkSnapshots** Read snapshots of the user.
 ```csharp

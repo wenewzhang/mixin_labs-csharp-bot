@@ -100,7 +100,7 @@ public static async Task<string> FetchMarketPriceAsync(string asset_id)
 ```
 
 #### 交易前，创建一个Memo!
-在第二章里,[基于Mixin Network的PHP比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README2-zhchs.md), 我们学习过退还用户比特币，在这里，我们除了给ExinCore支付币外，还要告诉他我们想购买的币是什么，即将想购买的币存到memo里。
+在第二章里,[基于Mixin Network的 C# 比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README2-zhchs.md), 我们学习过退还用户比特币，在这里，我们除了给ExinCore支付币外，还要告诉他我们想购买的币是什么，即将想购买的币存到memo里。
 ```csharp
 private static string TargetAssetID(string asset_id) {
   Guid guid = new Guid(asset_id);
@@ -130,6 +130,43 @@ public static string ASSET_ID_EOS = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d";
 public static string ASSET_ID_USDT= "815b0b1a-2764-3736-8faa-42d694fa620a";
 
 //Program.cs
+if (cmd == "5" ) {
+    var memo = TargetAssetID(USRCONFIG.ASSET_ID_USDT);
+    Console.WriteLine(memo);
+    using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+    {
+        var csv = new CsvReader(fileReader);
+        csv.Configuration.HasHeaderRecord = false;
+        while (csv.Read())
+        {
+          string PrivateKeyNewUser;
+          csv.TryGetField<string>(0, out PrivateKeyNewUser);
+          string PinTokenNewUser;
+          csv.TryGetField<string>(1, out PinTokenNewUser);
+          string SessionIDNewUser;
+          csv.TryGetField<string>(2, out SessionIDNewUser);
+          string UserIDNewUser;
+          csv.TryGetField<string>(3, out UserIDNewUser);
+          string PinNewUser;
+          csv.TryGetField<string>(4, out PinNewUser);
+          MixinApi mixinApiNewUser = new MixinApi();
+          mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+          // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
+          Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_BTC,
+                                  USRCONFIG.EXIN_BOT,
+                                  "0.0001",
+                                  PinNewUser.ToString(),
+                                  System.Guid.NewGuid().ToString(),
+                                  memo);
+          Console.WriteLine(reqInfo);
+        }
+    }
+}
+```
+
+如果你想卖出USDT买入比特币,调用方式如下：
+
+```csharp
 if (cmd == "6" ) {
     var memo = TargetAssetID(USRCONFIG.ASSET_ID_BTC);
     Console.WriteLine(memo);
@@ -162,23 +199,6 @@ if (cmd == "6" ) {
         }
     }
 }
-```
-
-如果你想卖出USDT买入比特币,调用方式如下：
-
-```go
-packUuid, _ := uuid.FromString(mixin.GetAssetId("BTC"))
-pack, _ := msgpack.Marshal(OrderAction{A: packUuid})
-memo := base64.StdEncoding.EncodeToString(pack)
-// fmt.Println(memo)
-priKey, pToken, sID, userID, uPIN := GetWalletInfo()
-bt, err := mixin.Transfer(EXIN_BOT,"0.0001",mixin.GetAssetId("USDT"),memo,
-                         messenger.UuidNewV4().String(),
-                         uPIN,pToken,userID,sID,priKey)
-if err != nil {
-        log.Fatal(err)
-}
-fmt.Println(string(bt))
 ```
 
 交易完成后，Exincore会将你需要的币转到你的帐上，同样，会在memo里，记录成交价格，交易费用等信息！你只需要按下面的方式解开即可！
