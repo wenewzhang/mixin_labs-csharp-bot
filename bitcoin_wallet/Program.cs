@@ -496,6 +496,32 @@ namespace bitcoin_wallet
                   Console.WriteLine(reqInfo);
                 }
             }
+            if (cmd == "tub" ) {
+                var assets = mixinApi.ReadAsset(USRCONFIG.ASSET_ID_USDT);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApi.Transfer(USRCONFIG.ASSET_ID_USDT,
+                                          GetWalletUUID(),
+                                          assets.balance,
+                                          USRCONFIG.PinCode,
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
+            if (cmd == "tum" ) {
+                MixinApi mixinApiNewUser = GetWalletSDK();
+                var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
+                Console.WriteLine(assets.balance);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
+                                          USRCONFIG.MASTER_UUID,
+                                          assets.balance,
+                                          GetWalletPinCode(),
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
             if (cmd == "o" ) {
               string PromptMsgO;
               PromptMsgO  = "1:  Fetch XIN/USDT orders\ns1: Sell XIN/USDT\nb1: Buy XIN/USDT\n";
