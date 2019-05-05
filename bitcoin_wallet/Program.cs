@@ -107,7 +107,9 @@ namespace bitcoin_wallet
             PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance & address \n3: Read USDT balance & address\n4: Read EOS balance & address\n";
             PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n";
             PromptMsg += "v: Verify Wallet Pin\n";
+            PromptMsg += "ab: Read Bot Assets \naw: Read Wallet Assets\n";
             PromptMsg += "q: Exit \nMake your choose:";
+
             // Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
             do {
             Console.WriteLine(PromptMsg);
@@ -255,8 +257,25 @@ namespace bitcoin_wallet
                   }
               }
             }
-            if (cmd == "a" ) {
-                Console.WriteLine(mixinApi.VerifyPIN(USRCONFIG.PinCode.ToString()).ToString());
+            if (cmd == "aw" ) {
+                // Console.WriteLine(mixinApi.VerifyPIN(USRCONFIG.PinCode.ToString()).ToString());
+                MixinApi mixinApiNewUser = GetWalletSDK();
+                var assets = mixinApiNewUser.ReadAssets();
+                string wuuid = GetWalletUUID();
+                Console.WriteLine("Current wallet uuid is " + wuuid);
+                foreach (var asset in assets)
+                {
+                   Console.WriteLine(asset.ToString());
+                   Console.WriteLine();
+                }
+            }
+            if (cmd == "ab" ) {
+                var assets = mixinApi.ReadAssets();
+                foreach (var asset in assets)
+                {
+                   Console.WriteLine(asset.ToString());
+                   Console.WriteLine();
+                }
             }
             if (cmd == "5" ) {
                 var memo = TargetAssetID(USRCONFIG.ASSET_ID_USDT);
@@ -313,8 +332,8 @@ namespace bitcoin_wallet
                       mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
                       // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
                       Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
-                                              USRCONFIG.EXIN_BOT,
-                                              "1",
+                                              USRCONFIG.MASTER_UUID,
+                                              "0.1078188",
                                               PinNewUser.ToString(),
                                               System.Guid.NewGuid().ToString(),
                                               memo);
@@ -413,7 +432,7 @@ namespace bitcoin_wallet
              Console.WriteLine("\nException Caught!");
              Console.WriteLine("Message :{0} ",e.Message);
           }
-          return "null";
+          return null;
         }
 
         public static string HexStringToUUID(string hex) {
@@ -539,5 +558,41 @@ namespace bitcoin_wallet
                 }
             }
         }
+      private static MixinApi GetWalletSDK() {
+        using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+        {
+            var csv = new CsvReader(fileReader);
+            csv.Configuration.HasHeaderRecord = false;
+            if (csv.Read())
+            {
+              string PrivateKeyNewUser;
+              csv.TryGetField<string>(0, out PrivateKeyNewUser);
+              string PinTokenNewUser;
+              csv.TryGetField<string>(1, out PinTokenNewUser);
+              string SessionIDNewUser;
+              csv.TryGetField<string>(2, out SessionIDNewUser);
+              string UserIDNewUser;
+              csv.TryGetField<string>(3, out UserIDNewUser);
+              string PinNewUser;
+              csv.TryGetField<string>(4, out PinNewUser);
+              MixinApi mixinApiNewUser = new MixinApi();
+              mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
+              return mixinApiNewUser;
+            } else return null;
+        }
+      }
+      private static string GetWalletUUID() {
+        using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+        {
+            var csv = new CsvReader(fileReader);
+            csv.Configuration.HasHeaderRecord = false;
+            if (csv.Read())
+            {
+              string UserIDNewUser;
+              csv.TryGetField<string>(3, out UserIDNewUser);
+              return UserIDNewUser;
+            } else return "";
+        }
+      }
     }
 }
