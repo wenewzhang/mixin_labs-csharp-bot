@@ -40,6 +40,18 @@ namespace bitcoin_wallet
             return JsonConvert.SerializeObject(this);
         }
     }
+    public class OceanOrder
+    {
+        public string S { get; set; }
+        public string A { get; set; }
+        public string P { get; set; }
+        public string T { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
     public class MarketInfo
     {
         public string code { get; set; }
@@ -545,6 +557,21 @@ namespace bitcoin_wallet
                   {
                       Console.WriteLine(value.price + " " + value.amount + " " + value.funds + " " + value.side);
                   }
+                }
+                if ( cmdo == "s1") {
+                  Console.WriteLine("Please input the price of XIN/USDT: ");
+                  var pinput = Console.ReadLine();
+                  Console.WriteLine("Please input the amount of XIN: ");
+                  var ainput = Console.ReadLine();
+                  OceanOrder order = new OceanOrder();
+                  order.S = "A";
+                  order.A = USRCONFIG.ASSET_ID_USDT;
+                  order.P = pinput;
+                  order.T = "L";
+                  var serializer2 = MessagePackSerializer.Get<OceanOrder>();
+                  var stream2 = new MemoryStream();
+                  serializer2.Pack(stream2, order);
+                  Console.WriteLine(Convert.ToBase64String(stream2.ToArray()));
                 }
               } while(true);
             }
