@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections;
 using MsgPack;
 using MsgPack.Serialization;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace bitcoin_wallet
     public class OceanOrder
     {
         public string S { get; set; }
-        public byte[] A { get; set; }
+        public string A { get; set; }
         public string P { get; set; }
         public string T { get; set; }
 
@@ -123,7 +124,8 @@ namespace bitcoin_wallet
             Console.WriteLine(Convert.ToBase64String(stream.ToArray()));
 
 
-            string dataStr = "hqFDzQPooVCnMzkzOC42MqFGqTAuMDAwNzg3OKJGQcQQgVsLGidkNzaPqkLWlPpiCqFUoVKhT8QQGj2FYSbnSbuK4+2Fziu5Vw==";
+            // string dataStr = "hKFToUGhQcQQgVsLGidkNzaPqkLWlPpiCqFQozE3N6FUoUw=";
+            string dataStr = "hKFUoUyhU6FBoVCjMTc3oUHEEIFbCxonZDc2j6pC1pT6Ygo=";
             var myByteArray = Convert.FromBase64String(dataStr);
             var str = MessagePackSerializer.UnpackMessagePackObject(myByteArray);
             Console.WriteLine(str);
@@ -565,13 +567,24 @@ namespace bitcoin_wallet
                   var ainput = Console.ReadLine();
                   OceanOrder order = new OceanOrder();
                   order.S = "A";
-                  order.A = Guid2Bytes(USRCONFIG.ASSET_ID_USDT);
-                  order.P = pinput;
+                  order.A = "0x815B0B1A276437368FAA42D694FA620A";
+                  order.P = "177";
                   order.T = "L";
                   var serializer2 = MessagePackSerializer.Get<OceanOrder>();
                   var stream2 = new MemoryStream();
                   serializer2.Pack(stream2, order);
                   Console.WriteLine(Convert.ToBase64String(stream2.ToArray()));
+
+
+                  Hashtable temp = new Hashtable();
+                  temp.Add("S","A");
+                  temp.Add("A",StringGuid2Bytes(USRCONFIG.ASSET_ID_USDT));
+                  temp.Add("P","177");
+                  temp.Add("T","L");
+                  var serializer3 = MessagePackSerializer.Get<Hashtable>();
+                  var stream3 = new MemoryStream();
+                  serializer3.Pack(stream3, temp);
+                  Console.WriteLine(Convert.ToBase64String(stream3.ToArray()));
                 }
               } while(true);
             }
@@ -657,7 +670,7 @@ namespace bitcoin_wallet
           serializer.Pack(stream, gbytes);
           return Convert.ToBase64String(stream.ToArray());
         }
-        private static byte[] Guid2Bytes(string asset_id) {
+        private static byte[] StringGuid2Bytes(string asset_id) {
           Guid guid = new Guid(asset_id);
           var gbytes = guid.ToByteArray();
           Array.Reverse(gbytes,0,4);
