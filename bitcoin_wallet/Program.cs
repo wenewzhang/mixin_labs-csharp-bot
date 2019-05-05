@@ -263,18 +263,32 @@ namespace bitcoin_wallet
                 var assets = mixinApiNewUser.ReadAssets();
                 string wuuid = GetWalletUUID();
                 Console.WriteLine("Current wallet uuid is " + wuuid);
-                foreach (var asset in assets)
+                foreach (Asset asset in assets)
                 {
-                   Console.WriteLine(asset.ToString());
-                   Console.WriteLine();
+                  if (asset.symbol == "EOS") {
+                   Console.WriteLine(asset.symbol + " Public Address is: " +
+                                     asset.account_name + " " +
+                                     asset.account_tag +
+                                     " Balance is: " + asset.balance);
+                 } else Console.WriteLine(asset.symbol + " Public Address is: " +
+                                          asset.public_key + " Balance is: " +
+                                          asset.balance);
+                Console.WriteLine();
                 }
             }
             if (cmd == "ab" ) {
                 var assets = mixinApi.ReadAssets();
-                foreach (var asset in assets)
+                foreach (Asset asset in assets)
                 {
-                   Console.WriteLine(asset.ToString());
-                   Console.WriteLine();
+                  if (asset.symbol == "EOS") {
+                   Console.WriteLine(asset.symbol + " Public Address is: " +
+                                     asset.account_name + " " +
+                                     asset.account_tag +
+                                     " Balance is: " + asset.balance);
+                 } else Console.WriteLine(asset.symbol + " Public Address is: " +
+                                          asset.public_key + " Balance is: " +
+                                          asset.balance);
+                Console.WriteLine();
                 }
             }
             if (cmd == "5" ) {
