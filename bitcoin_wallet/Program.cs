@@ -124,6 +124,9 @@ namespace bitcoin_wallet
                           USRCONFIG.PrivateKey);
             string PromptMsg;
             PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance & address \n3: Read USDT balance & address\n4: Read EOS balance & address\n";
+            PromptMsg += "tub: Transfer USDT from Bot to Wallet\ntum: Transfer USDT from Wallet to Master\n";
+            PromptMsg += "tcb: Transfer CNB from Bot to Wallet\ntcm: Transfer CNB from Wallet to Master\n";
+            PromptMsg += "txb: Transfer XIN from Bot to Wallet\ntxm: Transfer XIN from Wallet to Master\n";
             PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n";
             PromptMsg += "v: Verify Wallet Pin\n";
             PromptMsg += "ab: Read Bot Assets \naw: Read Wallet Assets\n";
@@ -440,6 +443,59 @@ namespace bitcoin_wallet
                   Console.WriteLine(value);
               }
             }
+            if (cmd == "txb" ) {
+                var assets = mixinApi.ReadAsset(USRCONFIG.XIN_ASSET_ID);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApi.Transfer(USRCONFIG.XIN_ASSET_ID,
+                                          GetWalletUUID(),
+                                          assets.balance,
+                                          USRCONFIG.PinCode,
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
+            if (cmd == "txm" ) {
+                MixinApi mixinApiNewUser = GetWalletSDK();
+                var assets = mixinApiNewUser.ReadAsset(USRCONFIG.XIN_ASSET_ID);
+                Console.WriteLine(assets.balance);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.XIN_ASSET_ID,
+                                          USRCONFIG.MASTER_UUID,
+                                          assets.balance,
+                                          GetWalletPinCode(),
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
+            if (cmd == "tcb" ) {
+                var assets = mixinApi.ReadAsset(USRCONFIG.CNB_ASSET_ID);
+                Console.WriteLine(assets.balance);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApi.Transfer(USRCONFIG.CNB_ASSET_ID,
+                                          GetWalletUUID(),
+                                          assets.balance,
+                                          USRCONFIG.PinCode,
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
+            if (cmd == "tcm" ) {
+                MixinApi mixinApiNewUser = GetWalletSDK();
+                var assets = mixinApiNewUser.ReadAsset(USRCONFIG.CNB_ASSET_ID);
+                Console.WriteLine(assets.balance);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.CNB_ASSET_ID,
+                                          USRCONFIG.MASTER_UUID,
+                                          assets.balance,
+                                          GetWalletPinCode(),
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
             if (cmd == "o" ) {
               string PromptMsgO;
               PromptMsgO  = "1:  Fetch XIN/USDT orders\ns1: Sell XIN/USDT\nb1: Buy XIN/USDT\n";
@@ -676,6 +732,19 @@ namespace bitcoin_wallet
               string UserIDNewUser;
               csv.TryGetField<string>(3, out UserIDNewUser);
               return UserIDNewUser;
+            } else return "";
+        }
+      }
+      private static string GetWalletPinCode() {
+        using (TextReader fileReader = File.OpenText(@"mybitcoin_wallet.csv"))
+        {
+            var csv = new CsvReader(fileReader);
+            csv.Configuration.HasHeaderRecord = false;
+            if (csv.Read())
+            {
+              string PinNewUser;
+              csv.TryGetField<string>(4, out PinNewUser);
+              return PinNewUser;
             } else return "";
         }
       }
