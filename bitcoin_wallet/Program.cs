@@ -50,6 +50,25 @@ namespace bitcoin_wallet
             return JsonConvert.SerializeObject(this);
         }
     }
+    public class MarketInfoOcean
+    {
+        public Omarket data { get; set; }
+    }
+    public class Omarket {
+      public string market { get; set; }
+      public string timestamp  { get; set; }
+      public Side data { get; set; }
+    }
+    public class Side {
+      public List<order> asks  { get; set; }
+      public List<order> bids  { get; set; }
+    }
+    public class order {
+      public string amount { get; set; }
+      public string funds { get; set; }
+      public string price { get; set; }
+      public string side { get; set; }
+    }
     public class AssetInfo
     {
         public string base_asset { get; set; }
@@ -432,7 +451,18 @@ namespace bitcoin_wallet
                 var cmdo = Console.ReadLine();
                 if (cmdo == "q") { break;}
                 if (cmdo == "1") {
-                  FetchOceanMarketPrice(USRCONFIG.XIN_ASSET_ID,USRCONFIG.ASSET_ID_USDT);
+                  string jsonData = FetchOceanMarketPrice(USRCONFIG.XIN_ASSET_ID,USRCONFIG.ASSET_ID_USDT);
+                  // string jsonData = FetchMarketPrice("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
+                  var marketObj = JsonConvert.DeserializeObject<MarketInfoOcean>(jsonData);
+                  Console.WriteLine("--Price--Amount---Funds---Side----");
+                  foreach (order value in marketObj.data.data.asks)
+                  {
+                      Console.WriteLine(value.price + " " + value.amount + " " + value.funds + " " + value.side);
+                  }
+                  foreach (order value in marketObj.data.data.bids)
+                  {
+                      Console.WriteLine(value.price + " " + value.amount + " " + value.funds + " " + value.side);
+                  }
                 }
               } while(true);
             }
