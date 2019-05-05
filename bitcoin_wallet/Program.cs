@@ -369,8 +369,8 @@ namespace bitcoin_wallet
                       mixinApiNewUser.Init(UserIDNewUser, "", SessionIDNewUser, PinTokenNewUser, PrivateKeyNewUser);
                       // Console.WriteLine(mixinApiNewUser.CreatePIN("", "123456").ToString());
                       Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
-                                              USRCONFIG.MASTER_UUID,
-                                              "0.1078188",
+                                              USRCONFIG.EXIN_BOT,
+                                              "1",
                                               PinNewUser.ToString(),
                                               System.Guid.NewGuid().ToString(),
                                               memo);
