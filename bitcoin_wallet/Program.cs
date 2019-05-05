@@ -108,6 +108,7 @@ namespace bitcoin_wallet
             PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n";
             PromptMsg += "v: Verify Wallet Pin\n";
             PromptMsg += "ab: Read Bot Assets \naw: Read Wallet Assets\n";
+            PromptMsg += "o:  OceanOne Trading\n";
             PromptMsg += "q: Exit \nMake your choose:";
 
             // Console.WriteLine(mixinApi.VerifyPIN(PinCode).ToString());
@@ -420,6 +421,21 @@ namespace bitcoin_wallet
                   Console.WriteLine(value);
               }
             }
+            if (cmd == "o" ) {
+              string PromptMsgO;
+              PromptMsgO  = "1:  Fetch XIN/USDT orders\ns1: Sell XIN/USDT\nb1: Buy XIN/USDT\n";
+              PromptMsgO += "2:  Fetch ERC20(Benz)/USDT orders\ns2: Sell Benz/USDT\nb2: Buy Benz/USDT\n";
+              PromptMsgO += "c: Cancel Order\nq:  Exit\n";
+
+              do {
+                Console.WriteLine(PromptMsgO);
+                var cmdo = Console.ReadLine();
+                if (cmdo == "q") { break;}
+                if (cmdo == "1") {
+                  FetchOceanMarketPrice(USRCONFIG.XIN_ASSET_ID,USRCONFIG.ASSET_ID_USDT);
+                }
+              } while(true);
+            }
           } while (true);
         }
 
@@ -449,6 +465,31 @@ namespace bitcoin_wallet
           return null;
         }
 
+        public static string FetchOceanMarketPrice(string asset_id, string base_asset)
+        {
+            return FetchOceanMarketPriceAsync(asset_id,base_asset).Result;
+        }
+        public static async Task<string> FetchOceanMarketPriceAsync(string asset_id, string base_asset)
+        {
+          HttpClient client = new HttpClient();
+          string baseUrl = "https://events.ocean.one/markets/" + asset_id + "-" + base_asset + "/book";
+          try
+          {
+             HttpResponseMessage response = await client.GetAsync(baseUrl);
+             response.EnsureSuccessStatusCode();
+             string responseBody = await response.Content.ReadAsStringAsync();
+             // Above three lines can be replaced with new helper method below
+             // string responseBody = await client.GetStringAsync(uri);
+             Console.WriteLine(responseBody);
+             return responseBody;
+          }
+          catch(HttpRequestException e)
+          {
+             Console.WriteLine("\nException Caught!");
+             Console.WriteLine("Message :{0} ",e.Message);
+          }
+          return null;
+        }
         public static string HexStringToUUID(string hex) {
           if (hex.Length == 34) {
             byte[] bytes = StringToByteArray(hex.Substring(2, 32));
