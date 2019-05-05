@@ -43,7 +43,7 @@ namespace bitcoin_wallet
     public class OceanOrder
     {
         public string S { get; set; }
-        public string A { get; set; }
+        public byte[] A { get; set; }
         public string P { get; set; }
         public string T { get; set; }
 
@@ -565,7 +565,7 @@ namespace bitcoin_wallet
                   var ainput = Console.ReadLine();
                   OceanOrder order = new OceanOrder();
                   order.S = "A";
-                  order.A = USRCONFIG.ASSET_ID_USDT;
+                  order.A = Guid2Bytes(USRCONFIG.ASSET_ID_USDT);
                   order.P = pinput;
                   order.T = "L";
                   var serializer2 = MessagePackSerializer.Get<OceanOrder>();
@@ -657,7 +657,14 @@ namespace bitcoin_wallet
           serializer.Pack(stream, gbytes);
           return Convert.ToBase64String(stream.ToArray());
         }
-
+        private static byte[] Guid2Bytes(string asset_id) {
+          Guid guid = new Guid(asset_id);
+          var gbytes = guid.ToByteArray();
+          Array.Reverse(gbytes,0,4);
+          Array.Reverse(gbytes,4,2);
+          Array.Reverse(gbytes,6,2);
+          return gbytes;
+        }
         private static void ExportPrivateKey(RSACryptoServiceProvider csp, TextWriter outputStream)
         {
             if (csp.PublicOnly) throw new ArgumentException("CSP does not contain a private key", "csp");
