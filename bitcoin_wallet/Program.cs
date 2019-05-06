@@ -566,15 +566,7 @@ namespace bitcoin_wallet
                   Console.WriteLine("Please input the amount of XIN: ");
                   var ainput = Console.ReadLine();
 
-                  Hashtable temp = new Hashtable();
-                  temp.Add("S","A");
-                  temp.Add("A",StringGuid2Bytes(USRCONFIG.ASSET_ID_USDT));
-                  temp.Add("P",pinput);
-                  temp.Add("T","L");
-                  var serializer3 = MessagePackSerializer.Get<Hashtable>();
-                  var stream3 = new MemoryStream();
-                  serializer3.Pack(stream3, temp);
-                  string memo = Convert.ToBase64String(stream3.ToArray());
+                  string memo = GenerateOrderMemo("A",USRCONFIG.ASSET_ID_USDT,pinput);
                   Console.WriteLine(memo);
                   // Console.WriteLine(Convert.ToBase64String(stream3.ToArray()));
                   MixinApi mixinApiNewUser = GetWalletSDK();
@@ -598,15 +590,7 @@ namespace bitcoin_wallet
                   Console.WriteLine("Please input the amount of USDT: ");
                   var ainput = Console.ReadLine();
 
-                  Hashtable temp = new Hashtable();
-                  temp.Add("S","B");
-                  temp.Add("A",StringGuid2Bytes(USRCONFIG.XIN_ASSET_ID));
-                  temp.Add("P",pinput);
-                  temp.Add("T","L");
-                  var serializer3 = MessagePackSerializer.Get<Hashtable>();
-                  var stream3 = new MemoryStream();
-                  serializer3.Pack(stream3, temp);
-                  string memo = Convert.ToBase64String(stream3.ToArray());
+                  string memo = GenerateOrderMemo("B",USRCONFIG.XIN_ASSET_ID,pinput);
                   Console.WriteLine(memo);
                   MixinApi mixinApiNewUser = GetWalletSDK();
                   var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
@@ -881,6 +865,18 @@ namespace bitcoin_wallet
               return PinNewUser;
             } else return "";
         }
+      }
+      private static string GenerateOrderMemo(string Side, string AssetUuid, string Price) {
+        Hashtable temp = new Hashtable();
+        temp.Add("S",Side);
+        temp.Add("A",StringGuid2Bytes(AssetUuid));
+        temp.Add("P",Price);
+        temp.Add("T","L");
+        var serializer3 = MessagePackSerializer.Get<Hashtable>();
+        var stream3 = new MemoryStream();
+        serializer3.Pack(stream3, temp);
+        string memo = Convert.ToBase64String(stream3.ToArray());
+        return memo;
       }
     }
 }
