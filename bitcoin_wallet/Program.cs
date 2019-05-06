@@ -625,6 +625,30 @@ namespace bitcoin_wallet
                     Console.WriteLine("Order id is " + reqInfo.trace_id);
                   } else Console.WriteLine("Not enough XIN!");
                 }
+                if ( cmdo == "s2") {
+                  Console.WriteLine("Please input the price of ERC20/USDT: ");
+                  var pinput = Console.ReadLine();
+                  Console.WriteLine("Please input the amount of ERC20: ");
+                  var ainput = Console.ReadLine();
+
+                  string memo = GenerateOrderMemo("A",USRCONFIG.ASSET_ID_USDT,pinput);
+                  Console.WriteLine(memo);
+                  // Console.WriteLine(Convert.ToBase64String(stream3.ToArray()));
+                  MixinApi mixinApiNewUser = GetWalletSDK();
+                  var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ERC20_BENZ);
+                  float balance = float.Parse(assets.balance);
+                  float amount  = float.Parse(ainput);
+                  if ( ( balance >= 0 ) && ( balance >= amount ) ) {
+                    Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ERC20_BENZ,
+                                            USRCONFIG.OCEANONE_BOT,
+                                            ainput,
+                                            GetWalletPinCode(),
+                                            System.Guid.NewGuid().ToString(),
+                                            memo);
+                    Console.WriteLine(reqInfo);
+                    Console.WriteLine("Order id is " + reqInfo.trace_id);
+                  } else Console.WriteLine("Not enough ERC20_BENZ!");
+                }
                 if ( cmdo == "b1") {
                   Console.WriteLine("Please input the price of XIN/USDT: ");
                   var pinput = Console.ReadLine();
@@ -632,6 +656,30 @@ namespace bitcoin_wallet
                   var ainput = Console.ReadLine();
 
                   string memo = GenerateOrderMemo("B",USRCONFIG.XIN_ASSET_ID,pinput);
+                  Console.WriteLine(memo);
+                  MixinApi mixinApiNewUser = GetWalletSDK();
+                  var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
+                  Console.WriteLine(assets.balance);
+                  float balance = float.Parse(assets.balance);
+                  float amount  = float.Parse(ainput);
+                  if ( ( balance >= 1.0 ) && ( balance >= amount ) ) {
+                    Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
+                                            USRCONFIG.OCEANONE_BOT,
+                                            ainput,
+                                            GetWalletPinCode(),
+                                            System.Guid.NewGuid().ToString(),
+                                            memo);
+                    Console.WriteLine(reqInfo);
+                    Console.WriteLine("Order id is " + reqInfo.trace_id);
+                  } else Console.WriteLine("Not enough USDT!");
+                }
+                if ( cmdo == "b2") {
+                  Console.WriteLine("Please input the price of ERC20_BENZ/USDT: ");
+                  var pinput = Console.ReadLine();
+                  Console.WriteLine("Please input the amount of USDT: ");
+                  var ainput = Console.ReadLine();
+
+                  string memo = GenerateOrderMemo("B",USRCONFIG.ERC20_BENZ,pinput);
                   Console.WriteLine(memo);
                   MixinApi mixinApiNewUser = GetWalletSDK();
                   var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
