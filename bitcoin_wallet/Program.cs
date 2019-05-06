@@ -141,6 +141,7 @@ namespace bitcoin_wallet
             PromptMsg += "tub: Transfer USDT from Bot to Wallet\ntum: Transfer USDT from Wallet to Master\n";
             PromptMsg += "tcb: Transfer CNB from Bot to Wallet\ntcm: Transfer CNB from Wallet to Master\n";
             PromptMsg += "txb: Transfer XIN from Bot to Wallet\ntxm: Transfer XIN from Wallet to Master\n";
+            PromptMsg += "teb: Transfer ERC20 from Bot to Wallet\ntem: Transfer ERC20 from Wallet to Master\n";
             PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: pay $1 USDT buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n";
             PromptMsg += "v: Verify Wallet Pin\n";
             PromptMsg += "ab: Read Bot Assets \naw: Read Wallet Assets\n";
@@ -536,6 +537,32 @@ namespace bitcoin_wallet
                   Console.WriteLine(reqInfo);
                 }
             }
+            if (cmd == "teb" ) {
+                var assets = mixinApi.ReadAsset(USRCONFIG.ERC20_BENZ);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApi.Transfer(USRCONFIG.ERC20_BENZ,
+                                          GetWalletUUID(),
+                                          assets.balance,
+                                          USRCONFIG.PinCode,
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
+            if (cmd == "tem" ) {
+                MixinApi mixinApiNewUser = GetWalletSDK();
+                var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ERC20_BENZ);
+                Console.WriteLine(assets.balance);
+                if ( float. Parse(assets.balance) > 0 ) {
+                  Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ERC20_BENZ,
+                                          USRCONFIG.MASTER_UUID,
+                                          assets.balance,
+                                          GetWalletPinCode(),
+                                          System.Guid.NewGuid().ToString(),
+                                          "hi");
+                  Console.WriteLine(reqInfo);
+                }
+            }
             if (cmd == "o" ) {
               string PromptMsgO;
               PromptMsgO  = "1:  Fetch XIN/USDT orders\ns1: Sell XIN/USDT\nb1: Buy XIN/USDT\n";
@@ -548,6 +575,20 @@ namespace bitcoin_wallet
                 if (cmdo == "q") { break;}
                 if (cmdo == "1") {
                   string jsonData = FetchOceanMarketPrice(USRCONFIG.XIN_ASSET_ID,USRCONFIG.ASSET_ID_USDT);
+                  // string jsonData = FetchMarketPrice("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
+                  var marketObj = JsonConvert.DeserializeObject<MarketInfoOcean>(jsonData);
+                  Console.WriteLine("--Price--Amount---Funds---Side----");
+                  foreach (order value in marketObj.data.data.asks)
+                  {
+                      Console.WriteLine(value.price + " " + value.amount + " " + value.funds + " " + value.side);
+                  }
+                  foreach (order value in marketObj.data.data.bids)
+                  {
+                      Console.WriteLine(value.price + " " + value.amount + " " + value.funds + " " + value.side);
+                  }
+                }
+                if (cmdo == "2") {
+                  string jsonData = FetchOceanMarketPrice(USRCONFIG.ERC20_BENZ,USRCONFIG.ASSET_ID_USDT);
                   // string jsonData = FetchMarketPrice("c6d0c728-2624-429b-8e0d-d9d19b6592fa");
                   var marketObj = JsonConvert.DeserializeObject<MarketInfoOcean>(jsonData);
                   Console.WriteLine("--Price--Amount---Funds---Side----");
