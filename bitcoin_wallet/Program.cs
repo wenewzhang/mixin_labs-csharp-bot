@@ -125,7 +125,7 @@ namespace bitcoin_wallet
 
 
             // string dataStr = "hKFToUGhQcQQgVsLGidkNzaPqkLWlPpiCqFQozE3N6FUoUw=";
-            string dataStr = "hKFUoUyhU6FBoVCjMTc3oUHEEIFbCxonZDc2j6pC1pT6Ygo=";
+            string dataStr = "hKFUoUyhUKMxNzehU6FBoUHEEIFbCxonZDc2j6pC1pT6Ygo=";
             var myByteArray = Convert.FromBase64String(dataStr);
             var str = MessagePackSerializer.UnpackMessagePackObject(myByteArray);
             Console.WriteLine(str);
@@ -565,38 +565,32 @@ namespace bitcoin_wallet
                   var pinput = Console.ReadLine();
                   Console.WriteLine("Please input the amount of XIN: ");
                   var ainput = Console.ReadLine();
-                  OceanOrder order = new OceanOrder();
-                  order.S = "A";
-                  order.A = "0x815B0B1A276437368FAA42D694FA620A";
-                  order.P = "177";
-                  order.T = "L";
-                  var serializer2 = MessagePackSerializer.Get<OceanOrder>();
-                  var stream2 = new MemoryStream();
-                  serializer2.Pack(stream2, order);
-                  Console.WriteLine(Convert.ToBase64String(stream2.ToArray()));
-
 
                   Hashtable temp = new Hashtable();
                   temp.Add("S","A");
                   temp.Add("A",StringGuid2Bytes(USRCONFIG.ASSET_ID_USDT));
-                  temp.Add("P","177");
+                  temp.Add("P",pinput);
                   temp.Add("T","L");
                   var serializer3 = MessagePackSerializer.Get<Hashtable>();
                   var stream3 = new MemoryStream();
                   serializer3.Pack(stream3, temp);
-                  Console.WriteLine(Convert.ToBase64String(stream3.ToArray()));
+                  string memo = Convert.ToBase64String(stream3.ToArray());
+                  Console.WriteLine(memo);
+                  // Console.WriteLine(Convert.ToBase64String(stream3.ToArray()));
                   MixinApi mixinApiNewUser = GetWalletSDK();
-                  var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
-                  Console.WriteLine(assets.balance);
-                  if ( float. Parse(assets.balance) > 0 ) {
-                    Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
-                                            USRCONFIG.MASTER_UUID,
-                                            assets.balance,
+                  var assets = mixinApiNewUser.ReadAsset(USRCONFIG.XIN_ASSET_ID);
+                  float balance = float.Parse(assets.balance);
+                  float amount  = float.Parse(ainput);
+                  if ( ( balance >= 0 ) && ( balance >= amount ) ) {
+                    Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.XIN_ASSET_ID,
+                                            USRCONFIG.OCEANONE_BOT,
+                                            ainput,
                                             GetWalletPinCode(),
                                             System.Guid.NewGuid().ToString(),
-                                            "hi");
+                                            memo);
                     Console.WriteLine(reqInfo);
-                  }
+                    Console.WriteLine("Order id is " + reqInfo.trace_id);
+                  } else Console.WriteLine("Not enough XIN!");
                 }
                 if ( cmdo == "b1") {
                   Console.WriteLine("Please input the price of XIN/USDT: ");
@@ -617,18 +611,41 @@ namespace bitcoin_wallet
                   MixinApi mixinApiNewUser = GetWalletSDK();
                   var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
                   Console.WriteLine(assets.balance);
-                  if ( float.Parse(assets.balance) >= 1 && ( float.Parse(assets.balance) > float.Parse(ainput) ) ) {
+                  float balance = float.Parse(assets.balance);
+                  float amount  = float.Parse(ainput);
+                  if ( ( balance >= 1.0 ) && ( balance >= amount ) ) {
                     Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
-                                            USRCONFIG.MASTER_UUID,
+                                            USRCONFIG.OCEANONE_BOT,
                                             ainput,
                                             GetWalletPinCode(),
                                             System.Guid.NewGuid().ToString(),
                                             memo);
                     Console.WriteLine(reqInfo);
-                  }
+                    Console.WriteLine("Order id is " + reqInfo.trace_id);
+                  } else Console.WriteLine("Not enough USDT!");
                 }
               if ( cmdo == "c") {
-
+                Console.WriteLine("Please input the Order id: ");
+                var oinput = Console.ReadLine();
+                Hashtable temp = new Hashtable();
+                temp.Add("O",StringGuid2Bytes(oinput));
+                var serializer3 = MessagePackSerializer.Get<Hashtable>();
+                var stream3 = new MemoryStream();
+                serializer3.Pack(stream3, temp);
+                string memo = Convert.ToBase64String(stream3.ToArray());
+                MixinApi mixinApiNewUser = GetWalletSDK();
+                var assets = mixinApiNewUser.ReadAsset(USRCONFIG.CNB_ASSET_ID);
+                Console.WriteLine(assets.balance);
+                float balance = float.Parse(assets.balance);
+                if (  balance >= 0  ) {
+                  Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.CNB_ASSET_ID,
+                                          USRCONFIG.OCEANONE_BOT,
+                                          "0.0000001",
+                                          GetWalletPinCode(),
+                                          System.Guid.NewGuid().ToString(),
+                                          memo);
+                  Console.WriteLine(reqInfo);
+                } else Console.WriteLine("Not enough CNB!");
                 }
               } while(true);
             }
