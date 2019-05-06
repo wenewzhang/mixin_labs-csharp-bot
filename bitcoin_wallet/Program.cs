@@ -585,6 +585,50 @@ namespace bitcoin_wallet
                   var stream3 = new MemoryStream();
                   serializer3.Pack(stream3, temp);
                   Console.WriteLine(Convert.ToBase64String(stream3.ToArray()));
+                  MixinApi mixinApiNewUser = GetWalletSDK();
+                  var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
+                  Console.WriteLine(assets.balance);
+                  if ( float. Parse(assets.balance) > 0 ) {
+                    Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
+                                            USRCONFIG.MASTER_UUID,
+                                            assets.balance,
+                                            GetWalletPinCode(),
+                                            System.Guid.NewGuid().ToString(),
+                                            "hi");
+                    Console.WriteLine(reqInfo);
+                  }
+                }
+                if ( cmdo == "b1") {
+                  Console.WriteLine("Please input the price of XIN/USDT: ");
+                  var pinput = Console.ReadLine();
+                  Console.WriteLine("Please input the amount of USDT: ");
+                  var ainput = Console.ReadLine();
+
+                  Hashtable temp = new Hashtable();
+                  temp.Add("S","B");
+                  temp.Add("A",StringGuid2Bytes(USRCONFIG.XIN_ASSET_ID));
+                  temp.Add("P",pinput);
+                  temp.Add("T","L");
+                  var serializer3 = MessagePackSerializer.Get<Hashtable>();
+                  var stream3 = new MemoryStream();
+                  serializer3.Pack(stream3, temp);
+                  string memo = Convert.ToBase64String(stream3.ToArray());
+                  Console.WriteLine(memo);
+                  MixinApi mixinApiNewUser = GetWalletSDK();
+                  var assets = mixinApiNewUser.ReadAsset(USRCONFIG.ASSET_ID_USDT);
+                  Console.WriteLine(assets.balance);
+                  if ( float.Parse(assets.balance) >= 1 && ( float.Parse(assets.balance) > float.Parse(ainput) ) ) {
+                    Transfer reqInfo = mixinApiNewUser.Transfer(USRCONFIG.ASSET_ID_USDT,
+                                            USRCONFIG.MASTER_UUID,
+                                            ainput,
+                                            GetWalletPinCode(),
+                                            System.Guid.NewGuid().ToString(),
+                                            memo);
+                    Console.WriteLine(reqInfo);
+                  }
+                }
+              if ( cmdo == "c") {
+
                 }
               } while(true);
             }
