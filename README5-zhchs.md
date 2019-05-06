@@ -50,7 +50,7 @@ if (cmd == "aw" ) {
 #### 取得Ocean.one的市场价格信息
 如何来查询Ocean.one市场的价格信息呢？你要先了解你交易的基础币是什么，如果你想买比特币，卖出USDT,那么基础货币就是USDT;如果你想买USDT,卖出比特币，那么基础货币就是比特币.
 
-``````csharp
+```csharp
 public class MarketInfoOcean
 {
     public Omarket data { get; set; }
@@ -117,6 +117,7 @@ public static async Task<string> FetchOceanMarketPriceAsync(string asset_id, str
 - **Side** 方向,"B" 或者 "A", "B"是购买, "A"是出售.
 - **AssetUuid** 目标虚拟资产的UUID.
 - **Price** 价格，如果操作方向是"B", 价格就是AssetUUID的价格; 如果操作方向是"B", 价格就是转给Ocean.one币的价格.
+
 ```csharp
 private static string GenerateOrderMemo(string Side, string AssetUuid, string Price) {
   Hashtable temp = new Hashtable();
@@ -197,7 +198,9 @@ if ( cmdo == "s1") {
   } else Console.WriteLine("Not enough XIN!");
 }
 ```
+
 一个成功的挂单如下：
+
 ```bash
 Please input the price of XIN/USDT:
 110
@@ -213,8 +216,10 @@ hKFBxBDJSsiPRnE5drYKCQZPGBHooVShTKFToUKhUKMxMTA=
 "created_at":"2019-05-06T06:43:13.488971627Z"}
 Order id is 12cd76aa-e953-4897-bef0-18123a5e69dc
 ```
+
 #### 取消挂单
 Ocean.one将trace_id当做订单，比如上面的例子， **12cd76aa-e953-4897-bef0-18123a5e69dc** 就是订单号，我们用他来取消订单。
+
 ```csharp
 if ( cmdo == "c") {
   Console.WriteLine("Please input the Order id: ");
@@ -240,6 +245,7 @@ if ( cmdo == "c") {
   } else Console.WriteLine("Not enough CNB!");
   }
 ```
+
 #### 通过读取资产余额，来确认到帐情况
 ```csharp
 MixinApi mixinApiNewUser = GetWalletSDK();
