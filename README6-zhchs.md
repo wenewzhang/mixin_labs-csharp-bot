@@ -1,4 +1,4 @@
-# 在OceanOne上挂单买卖任意ERC20 token
+# 用C#在去中心化交易所OceanOne上挂单买卖任意ERC20 token
 ![cover](https://github.com/wenewzhang/mixin_labs-csharp-bot/raw/master/BItcoin_C%23.jpg)
 
 在[上一课](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README5.md)中，我们介绍了如何在OceanOne交易比特币。OceanOne支持交易任何Mixin Network上的token，包括所有的ERC20和EOS token，不需要任何手续和费用，直接挂单即可。下面介绍如何将将一个ERC20 token挂上OceanOne交易。掌握了ERC20的代币买卖之后，你就可以用同样的方法买卖任何EOS以及其他Mixin Network上的token
