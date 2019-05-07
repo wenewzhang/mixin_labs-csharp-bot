@@ -1,7 +1,7 @@
 # 通过 C# 买卖Bitcoin
 ![cover](https://github.com/wenewzhang/mixin_labs-csharp-bot/raw/master/BItcoin_C%23.jpg)
 上一章介绍了[Exincore](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/README4-zhchs.md)，你可以1秒完成资产的市价买卖。如果你想限定价格买卖，或者买卖一些exincore不支持的资产，你需要OceanOne。
-## 方案二: 挂单Ocean.One交易所
+## 方案二: 在去中心化交易所OceanOne上挂单买卖Bitcoin
 [Ocean.one](https://github.com/mixinNetwork/ocean.one)是基于Mixin Network的去中心化交易所，它性能一流。
 你可以在OceanOne上交易任何资产，只需要将你的币转给OceanOne, 将交易信息写在交易的memo里，OceanOne会在市场里列出你的交易需求，
 交易成功后，会将目标币转入到你的MixinNetwork帐上，它有三大特点与优势：
