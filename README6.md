@@ -162,15 +162,20 @@ public static async Task<string> FetchOceanMarketPriceAsync(string asset_id, str
 
 Commands list of this source code:
 
-- trb:Transfer ERC20 from Bot to Wallet
-- trm:Transfer ERC20 from Wallet to Master
+Commands list of this source code:
+
+- teb:Transfer ERC20 from Bot to Wallet
+- tem:Transfer ERC20 from Wallet to Master
 - o: Ocean.One Exchange
 
-Make your choose(eg: q for Exit!):
-- x:  Orders-Book of ERC20/USDT
-- x1: Buy ERC20 pay USDT
-- x2: Sell ERC20 get USDT
-- c: Cancel the order
-- q: Exit
+Make your choose:
+- 1:  Fetch XIN/USDT orders
+- s1: Sell XIN/USDT
+- b1: Buy XIN/USDT
+- 2:  Fetch ERC20(Benz)/USDT orders
+- s2: Sell Benz/USDT
+- b2: Buy Benz/USDT
+- c: Cancel Order
+- q:  Exit
 
 [Full source code](https://github.com/wenewzhang/mixin_labs-csharp-bot/blob/master/bitcoin_wallet/Program.cs)
