@@ -162,8 +162,6 @@ public static async Task<string> FetchOceanMarketPriceAsync(string asset_id, str
 
 Commands list of this source code:
 
-Commands list of this source code:
-
 - teb:Transfer ERC20 from Bot to Wallet
 - tem:Transfer ERC20 from Wallet to Master
 - o: Ocean.One Exchange
