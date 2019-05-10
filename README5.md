@@ -261,8 +261,8 @@ var assets = mixinApiNewUser.ReadAssets();
 ## Source code usage
 Build it and then run it.
 
-- [x] **dotnet build** 编译项目.
-- [x] **dotnet bin/Debug/netcoreapp2.2/bitcoin_wallet.dll** 运行它.
+- [x] **dotnet build** build it.
+- [x] **dotnet bin/Debug/netcoreapp2.2/bitcoin_wallet.dll** run it.
 
 
 Commands list of this source code:
